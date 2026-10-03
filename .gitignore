@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node / Vite
+node_modules/
+dist/
+
+# Logs
+*.log
