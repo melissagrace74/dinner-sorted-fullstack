@@ -3,24 +3,37 @@ import { Link } from "react-router-dom";
 
 function RecipeCard({ meal }) {
   return (
-    <article>
-      <img
-        src={meal.strMealThumb}
-        alt={meal.strMeal}
-      />
+    <article className="recipe-card">
+      <Link
+        className="recipe-card-link"
+        to={`/recipes/${meal.idMeal}`}
+        aria-label={`View ${meal.strMeal} recipe`}
+      >
+        <img
+          src={meal.strMealThumb}
+          alt={meal.strMeal}
+        />
 
-      <div>
-        <h2>{meal.strMeal}</h2>
+        <div className="recipe-card-content">
+          <h3>{meal.strMeal}</h3>
 
-        <p>
-          {meal.strCategory}
-          {meal.strArea && ` • ${meal.strArea}`}
-        </p>
+          <div className="recipe-card-meta">
+            {meal.strCategory && (
+              <p>
+                <strong>Category:</strong>{" "}
+                {meal.strCategory}
+              </p>
+            )}
 
-        <Link to={`/recipes/${meal.idMeal}`}>
-          View Recipe
-        </Link>
-      </div>
+            {meal.strArea && (
+              <p>
+                <strong>Cuisine:</strong>{" "}
+                {meal.strArea}
+              </p>
+            )}
+          </div>
+        </div>
+      </Link>
     </article>
   );
 }

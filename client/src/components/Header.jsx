@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
-
 function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ function Header() {
 
   return (
     <header>
-      <Link to="/">
+      <Link className="site-title" to="/">
         Dinner, Sorted
       </Link>
 
@@ -28,12 +27,18 @@ function Header() {
         {user ? (
           <>
             <Link to="/meal-plans">
-              Meal Plans
+              My Meal Plans
             </Link>
 
-            <span>Hi, {user.username}</span>
+            <span className="user-greeting">
+              Hi, {user.username}
+            </span>
 
-            <button type="button" onClick={handleLogout}>
+            <button
+              className="nav-button"
+              type="button"
+              onClick={handleLogout}
+            >
               Log Out
             </button>
           </>

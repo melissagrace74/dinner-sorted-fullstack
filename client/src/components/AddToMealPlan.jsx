@@ -9,21 +9,23 @@ import {
   getPlannedMeals,
 } from "../services/backendApi";
 
-
 function AddToMealPlan({ meal }) {
   const { user } = useAuth();
 
   const [mealPlans, setMealPlans] = useState([]);
   const [plannedMeals, setPlannedMeals] = useState([]);
-  const [selectedMealPlanId, setSelectedMealPlanId] = useState("");
+  const [selectedMealPlanId, setSelectedMealPlanId] =
+    useState("");
   const [selectedDay, setSelectedDay] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingMeals, setIsLoadingMeals] = useState(false);
+  const [isLoadingMeals, setIsLoadingMeals] =
+    useState(false);
   const [isAdding, setIsAdding] = useState(false);
 
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] =
+    useState("");
 
   useEffect(() => {
     if (!user) {
@@ -120,14 +122,22 @@ function AddToMealPlan({ meal }) {
     }
   }
 
+  const weekIsFull =
+    !isLoadingMeals &&
+    DAYS.every((day) =>
+      plannedMeals.some(
+        (plannedMeal) => plannedMeal.day === day
+      )
+    );
+
   if (!user) {
     return (
-      <section>
-        <h2>Add to Meal Plan</h2>
+      <section className="add-to-plan">
+        <h2>Plan Your Week</h2>
 
         <p>
-          <Link to="/login">Log in</Link> to add this recipe
-          to your meal plan.
+          <Link to="/login">Log in</Link> to add this
+          recipe to your meal plan.
         </p>
       </section>
     );
@@ -135,8 +145,8 @@ function AddToMealPlan({ meal }) {
 
   if (isLoading) {
     return (
-      <section>
-        <h2>Add to Meal Plan</h2>
+      <section className="add-to-plan">
+        <h2>Plan Your Week</h2>
         <p>Loading your meal plans...</p>
       </section>
     );
@@ -144,8 +154,8 @@ function AddToMealPlan({ meal }) {
 
   if (mealPlans.length === 0) {
     return (
-      <section>
-        <h2>Add to Meal Plan</h2>
+      <section className="add-to-plan">
+        <h2>Plan Your Week</h2>
 
         <p>
           You don't have a meal plan yet.{" "}
@@ -159,20 +169,25 @@ function AddToMealPlan({ meal }) {
   }
 
   return (
-    <section>
-      <h2>Add to Meal Plan</h2>
+    <section className="add-to-plan">
+      <h2>Plan Your Week</h2>
 
-      <form onSubmit={handleAddMeal}>
-        <div>
+      <form
+        className="add-to-plan-form"
+        onSubmit={handleAddMeal}
+      >
+        <div className="add-to-plan-field">
           <label htmlFor="add-meal-plan">
-            Meal plan
+            Meal Plan
           </label>
 
           <select
             id="add-meal-plan"
             value={selectedMealPlanId}
             onChange={(event) => {
-              setSelectedMealPlanId(event.target.value);
+              setSelectedMealPlanId(
+                event.target.value
+              );
               setSelectedDay("");
               setSuccessMessage("");
               setError("");
@@ -189,67 +204,111 @@ function AddToMealPlan({ meal }) {
           </select>
         </div>
 
-        <div>
-          <label htmlFor="add-meal-day">
-            Day
-          </label>
-
-          <select
-            id="add-meal-day"
-            value={selectedDay}
-            onChange={(event) => {
-              setSelectedDay(event.target.value);
-              setSuccessMessage("");
-              setError("");
-            }}
-            disabled={isLoadingMeals}
+        {isLoadingMeals ? (
+          <p className="day-loading">
+            Loading days...
+          </p>
+        ) : successMessage ? (
+          <div
+            className="add-to-plan-success"
+            role="status"
           >
-            <option value="">
-              {isLoadingMeals
-                ? "Loading days..."
-                : "Choose a day"}
-            </option>
+            <p>{successMessage}</p>
 
-            {DAYS.map((day) => {
-              const dayIsOccupied = plannedMeals.some(
-                (plannedMeal) => plannedMeal.day === day
-              );
+            <Link
+              className="back-link"
+              to="/meal-plans"
+            >
+              Go to My Meal Plans
+            </Link>
+          </div>
+        ) : weekIsFull ? (
+          <div className="add-to-plan-full">
+            <p>
+              <strong>Your week is full.</strong>
+            </p>
 
-              return (
-                <option
-                  key={day}
-                  value={day}
-                  disabled={dayIsOccupied}
-                >
-                  {day}
-                  {dayIsOccupied ? " — already planned" : ""}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+            <p>
+              All seven days already have a meal
+              planned.
+            </p>
 
-        <button
-          type="submit"
-          disabled={
-            isAdding ||
-            isLoadingMeals ||
-            !selectedMealPlanId ||
-            !selectedDay
-          }
-        >
-          {isAdding ? "Adding..." : "Add to Meal Plan"}
-        </button>
+            <Link
+              className="back-link"
+              to="/meal-plans"
+            >
+              Go to My Meal Plans
+            </Link>
+          </div>
+        ) : (
+          <>
+            <fieldset className="meal-plan-days">
+              <legend>Choose a Day</legend>
+
+              <div className="day-button-grid">
+                {DAYS.map((day) => {
+                  const dayIsOccupied =
+                    plannedMeals.some(
+                      (plannedMeal) =>
+                        plannedMeal.day === day
+                    );
+
+                  const dayIsSelected =
+                    selectedDay === day;
+
+                  return (
+                    <button
+                      key={day}
+                      className={
+                        dayIsSelected
+                          ? "day-button selected-day"
+                          : "day-button"
+                      }
+                      type="button"
+                      disabled={dayIsOccupied}
+                      aria-pressed={dayIsSelected}
+                      onClick={() => {
+                        setSelectedDay(
+                          dayIsSelected ? "" : day
+                        );
+                        setSuccessMessage("");
+                        setError("");
+                      }}
+                    >
+                      {dayIsSelected && (
+                        <span className="day-check">
+                          ✓
+                        </span>
+                      )}
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            <button
+              className="add-to-plan-button"
+              type="submit"
+              disabled={
+                isAdding ||
+                !selectedMealPlanId ||
+                !selectedDay
+              }
+            >
+              {isAdding
+                ? "Adding..."
+                : "Add This Recipe"}
+            </button>
+          </>
+        )}
       </form>
 
-      {successMessage && (
-        <p role="status">
-          {successMessage}
-        </p>
-      )}
-
       {error && (
-        <p role="alert">
+        <p
+          className="add-to-plan-error"
+          role="alert"
+        >
           {error}
         </p>
       )}

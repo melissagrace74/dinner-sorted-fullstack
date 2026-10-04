@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
-
 function SignupPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -30,47 +29,86 @@ function SignupPage() {
   }
 
   return (
-    <main>
-      <h1>Create Account</h1>
+    <main className="auth-page">
+      <section className="auth-card">
+        <div className="auth-heading">
+          <h1>Create Account</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            autoComplete="username"
-            required
-          />
+          <p>
+            Create an account to save and organize your weekly meal plans.
+          </p>
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="new-password"
-            minLength="8"
-            required
-          />
-        </div>
+        <form
+          className="auth-form"
+          onSubmit={handleSubmit}
+        >
+          <div className="auth-field">
+            <label htmlFor="username">
+              Username
+            </label>
 
-        <p>Password must be at least 8 characters long.</p>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(event) =>
+                setUsername(event.target.value)
+              }
+              autoComplete="username"
+              required
+            />
+          </div>
 
-        {error && <p role="alert">{error}</p>}
+          <div className="auth-field">
+            <label htmlFor="password">
+              Password
+            </label>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Creating account..." : "Create Account"}
-        </button>
-      </form>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
+              autoComplete="new-password"
+              minLength="8"
+              required
+            />
 
-      <p>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
+            <p className="auth-field-help">
+              Password must be at least 8 characters long.
+            </p>
+          </div>
+
+          {error && (
+            <p
+              className="auth-error"
+              role="alert"
+            >
+              {error}
+            </p>
+          )}
+
+          <button
+            className="auth-submit-button"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? "Creating account..."
+              : "Create Account"}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          Already have an account?{" "}
+          <Link to="/login">
+            Log in
+          </Link>
+        </p>
+      </section>
     </main>
   );
 }

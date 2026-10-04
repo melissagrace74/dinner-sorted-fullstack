@@ -51,9 +51,15 @@ function RecipeDetailsPage() {
   if (error) {
     return (
       <main>
-        <h1>Recipe Not Found</h1>
-        <p role="alert">{error}</p>
-        <Link to="/">Return to recipe search</Link>
+        <section className="recipe-error">
+          <h1>Recipe Not Found</h1>
+
+          <p role="alert">{error}</p>
+
+          <Link className="back-link" to="/">
+            ← Return to recipe search
+          </Link>
+        </section>
       </main>
     );
   }
@@ -69,61 +75,87 @@ function RecipeDetailsPage() {
     : [];
 
   return (
-    <main>
-      <Link to="/">Back to recipe search</Link>
+    <main className="recipe-details-page">
+      <div className="recipe-details-back">
+        <Link className="back-link" to="/">
+          ← Back to recipes
+        </Link>
+      </div>
 
-      <article>
-        <h1>{meal.strMeal}</h1>
-
-        <p>
-          {meal.strCategory}
-          {meal.strArea && ` • ${meal.strArea}`}
-        </p>
-
+      <article className="recipe-details">
         <img
+          className="recipe-details-image"
           src={meal.strMealThumb}
           alt={meal.strMeal}
         />
 
-        <AddToMealPlan meal={meal} />
+        <div className="recipe-details-content">
+          <h1>{meal.strMeal}</h1>
 
-        <section>
-          <h2>Ingredients</h2>
+          <div className="recipe-meta">
+            {meal.strCategory && (
+              <p>
+                <strong>Category:</strong>{" "}
+                {meal.strCategory}
+              </p>
+            )}
 
-          <ul>
-            {ingredients.map(({ ingredient, measure }, index) => (
-              <li key={`${ingredient}-${index}`}>
-                {measure && `${measure} `}
-                {ingredient}
-              </li>
-            ))}
-          </ul>
-        </section>
+            {meal.strArea && (
+              <p>
+                <strong>Cuisine:</strong>{" "}
+                {meal.strArea}
+              </p>
+            )}
+          </div>
 
-        <section>
-          <h2>Instructions</h2>
+          <AddToMealPlan meal={meal} />
 
-          {instructionSteps.length > 0 ? (
-            instructionSteps.map((step, index) => (
-              <p key={index}>{step}</p>
-            ))
-          ) : (
-            <p>No instructions are available for this recipe.</p>
-          )}
-        </section>
+          <section className="recipe-section">
+            <h2>Ingredients</h2>
 
-        {videoUrl && (
-          <section>
-            <h2>Recipe Video</h2>
-
-            <iframe
-              src={videoUrl}
-              title={`${meal.strMeal} recipe video`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <ul className="ingredient-list">
+              {ingredients.map(
+                ({ ingredient, measure }, index) => (
+                  <li key={`${ingredient}-${index}`}>
+                    {measure && `${measure} `}
+                    {ingredient}
+                  </li>
+                )
+              )}
+            </ul>
           </section>
-        )}
+
+          <section className="recipe-section">
+            <h2>Instructions</h2>
+
+            <div className="instruction-list">
+              {instructionSteps.length > 0 ? (
+                instructionSteps.map((step, index) => (
+                  <p key={index}>{step}</p>
+                ))
+              ) : (
+                <p>
+                  No instructions are available for this recipe.
+                </p>
+              )}
+            </div>
+          </section>
+
+          {videoUrl && (
+            <section className="recipe-section recipe-video">
+              <h2>Video</h2>
+
+              <div className="video-wrapper">
+                <iframe
+                  src={videoUrl}
+                  title={`${meal.strMeal} recipe video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </section>
+          )}
+        </div>
       </article>
     </main>
   );

@@ -5,6 +5,8 @@ import {
   Routes,
 } from "react-router-dom";
 
+import "./App.css";
+
 import Header from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import MealPlanSelector from "../components/MealPlanSelector";
 import WeeklyPlanner from "../components/WeeklyPlanner";
 import {
   createMealPlan,
+  createPlannedMeal,
   deleteMealPlan,
   deletePlannedMeal,
   getMealPlans,
@@ -12,10 +12,20 @@ import {
   updateMealPlan,
 } from "../services/backendApi";
 
+function sortMealPlans(plans) {
+  return [...plans].sort((a, b) => {
+    if (a.created_at && b.created_at) {
+      return new Date(a.created_at) - new Date(b.created_at);
+    }
+
+    return a.id - b.id;
+  });
+}
 
 function MealPlanPage() {
   const [mealPlans, setMealPlans] = useState([]);
-  const [selectedMealPlanId, setSelectedMealPlanId] = useState(null);
+  const [selectedMealPlanId, setSelectedMealPlanId] =
+    useState(null);
   const [plannedMeals, setPlannedMeals] = useState([]);
 
   const [newPlanName, setNewPlanName] = useState("");
@@ -34,10 +44,12 @@ function MealPlanPage() {
 
       try {
         const data = await getMealPlans();
-        setMealPlans(data.meal_plans);
+        const sortedPlans = sortMealPlans(data.meal_plans);
 
-        if (data.meal_plans.length > 0) {
-          setSelectedMealPlanId(data.meal_plans[0].id);
+        setMealPlans(sortedPlans);
+
+        if (sortedPlans.length > 0) {
+          setSelectedMealPlanId(sortedPlans[0].id);
         }
       } catch (error) {
         setError(error.message);
@@ -60,7 +72,10 @@ function MealPlanPage() {
       setError("");
 
       try {
-        const data = await getPlannedMeals(selectedMealPlanId);
+        const data = await getPlannedMeals(
+          selectedMealPlanId
+        );
+
         setPlannedMeals(data.planned_meals);
       } catch (error) {
         setPlannedMeals([]);
@@ -88,10 +103,12 @@ function MealPlanPage() {
     try {
       const data = await createMealPlan(planName);
 
-      setMealPlans((currentPlans) => [
-        data.meal_plan,
-        ...currentPlans,
-      ]);
+      setMealPlans((currentPlans) =>
+        sortMealPlans([
+          ...currentPlans,
+          data.meal_plan,
+        ])
+      );
 
       setSelectedMealPlanId(data.meal_plan.id);
       setNewPlanName("");
@@ -100,6 +117,13 @@ function MealPlanPage() {
     } finally {
       setIsCreating(false);
     }
+  }
+
+  function handleSelectPlan(mealPlanId) {
+    setSelectedMealPlanId(mealPlanId);
+    setEditingPlanId(null);
+    setEditingPlanName("");
+    setError("");
   }
 
   function handleStartEditing(mealPlan) {
@@ -125,7 +149,10 @@ function MealPlanPage() {
     setError("");
 
     try {
-      const data = await updateMealPlan(mealPlanId, planName);
+      const data = await updateMealPlan(
+        mealPlanId,
+        planName
+      );
 
       setMealPlans((currentPlans) =>
         currentPlans.map((mealPlan) =>
@@ -179,7 +206,10 @@ function MealPlanPage() {
     }
   }
 
-  async function handleMoveOrSwapMeal(plannedMealId, newDay) {
+  async function handleMoveOrSwapMeal(
+    plannedMealId,
+    newDay
+  ) {
     setError("");
 
     try {
@@ -205,6 +235,47 @@ function MealPlanPage() {
     }
   }
 
+  async function handleCopyMeal(plannedMeal, newDay) {
+    if (!selectedMealPlanId) {
+      return false;
+    }
+
+    const dayIsOccupied = plannedMeals.some(
+      (meal) => meal.day === newDay
+    );
+
+    if (dayIsOccupied) {
+      setError(
+        `${newDay} already has a planned meal.`
+      );
+      return false;
+    }
+
+    setError("");
+
+    try {
+      const data = await createPlannedMeal(
+        selectedMealPlanId,
+        {
+          day: newDay,
+          mealdb_id: plannedMeal.mealdb_id,
+          meal_name: plannedMeal.meal_name,
+          thumbnail: plannedMeal.thumbnail,
+        }
+      );
+
+      setPlannedMeals((currentMeals) => [
+        ...currentMeals,
+        data.planned_meal,
+      ]);
+
+      return true;
+    } catch (error) {
+      setError(error.message);
+      return false;
+    }
+  }
+
   async function handleRemoveMeal(plannedMealId) {
     const shouldRemove = window.confirm(
       "Remove this meal from the meal plan?"
@@ -221,7 +292,8 @@ function MealPlanPage() {
 
       setPlannedMeals((currentMeals) =>
         currentMeals.filter(
-          (plannedMeal) => plannedMeal.id !== plannedMealId
+          (plannedMeal) =>
+            plannedMeal.id !== plannedMealId
         )
       );
     } catch (error) {
@@ -229,138 +301,244 @@ function MealPlanPage() {
     }
   }
 
+  const selectedMealPlan = mealPlans.find(
+    (mealPlan) => mealPlan.id === selectedMealPlanId
+  );
+
   return (
-    <main>
-      <h1>Meal Plans</h1>
+    <main className="meal-plan-page">
+      <section className="meal-plan-intro">
+        <h1>My Meal Plans</h1>
 
-      <p>
-        Create a meal plan and organize your dinners for the week.
-      </p>
-
-      <section>
-        <h2>Create a Meal Plan</h2>
-
-        <form onSubmit={handleCreatePlan}>
-          <label htmlFor="meal-plan-name">
-            Meal plan name
-          </label>
-
-          <input
-            id="meal-plan-name"
-            type="text"
-            value={newPlanName}
-            onChange={(event) => setNewPlanName(event.target.value)}
-            placeholder="This Week"
-            disabled={isCreating}
-            maxLength="100"
-          />
-
-          <button
-            type="submit"
-            disabled={isCreating || !newPlanName.trim()}
-          >
-            {isCreating ? "Creating..." : "Create Plan"}
-          </button>
-        </form>
-      </section>
-
-      {error && (
-        <p role="alert">
-          {error}
+        <p>
+          Create a new meal plan or choose an existing
+          one, and organize your dinners for the week.
         </p>
-      )}
-
-      <section>
-        <h2>Your Meal Plans</h2>
-
-        {isLoading ? (
-          <p>Loading meal plans...</p>
-        ) : mealPlans.length === 0 ? (
-          <p>
-            You don't have any meal plans yet. Create one to get started.
-          </p>
-        ) : (
-          <ul>
-            {mealPlans.map((mealPlan) => (
-              <li key={mealPlan.id}>
-                {editingPlanId === mealPlan.id ? (
-                  <form
-                    onSubmit={(event) =>
-                      handleUpdatePlan(event, mealPlan.id)
-                    }
-                  >
-                    <label htmlFor={`plan-name-${mealPlan.id}`}>
-                      Meal plan name
-                    </label>
-
-                    <input
-                      id={`plan-name-${mealPlan.id}`}
-                      type="text"
-                      value={editingPlanName}
-                      onChange={(event) =>
-                        setEditingPlanName(event.target.value)
-                      }
-                      maxLength="100"
-                    />
-
-                    <button
-                      type="submit"
-                      disabled={!editingPlanName.trim()}
-                    >
-                      Save
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleCancelEditing}
-                    >
-                      Cancel
-                    </button>
-                  </form>
-                ) : (
-                  <>
-                    <span>{mealPlan.name}</span>
-
-                    <button
-                      type="button"
-                      onClick={() => handleStartEditing(mealPlan)}
-                    >
-                      Rename
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleDeletePlan(mealPlan.id)}
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
       </section>
 
-      {!isLoading && mealPlans.length > 0 && (
-        <>
-          <MealPlanSelector
-            mealPlans={mealPlans}
-            selectedMealPlanId={selectedMealPlanId}
-            onSelectMealPlan={setSelectedMealPlanId}
-          />
+      <section className="meal-plan-management">
+        {error && (
+          <p
+            className="meal-plan-error"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
 
-          {isLoadingMeals ? (
-            <p>Loading planned meals...</p>
-          ) : (
-            <WeeklyPlanner
-              plannedMeals={plannedMeals}
-              onMoveOrSwapMeal={handleMoveOrSwapMeal}
-              onRemoveMeal={handleRemoveMeal}
-            />
-          )}
-        </>
-      )}
+        <div className="meal-plan-management-grid">
+          <section className="meal-plan-management-column">
+            <div className="meal-plan-column-heading">
+              <h2>New Meal Plan</h2>
+            </div>
+
+            <form
+              className="create-plan-form"
+              onSubmit={handleCreatePlan}
+            >
+              <div className="create-plan-field">
+                <input
+                  id="meal-plan-name"
+                  type="text"
+                  value={newPlanName}
+                  onChange={(event) =>
+                    setNewPlanName(event.target.value)
+                  }
+                  placeholder="Enter name"
+                  aria-label="Meal plan name"
+                  disabled={isCreating}
+                  maxLength="100"
+                />
+              </div>
+
+              <button
+                className="create-plan-button"
+                type="submit"
+                disabled={
+                  isCreating || !newPlanName.trim()
+                }
+              >
+                {isCreating
+                  ? "Creating..."
+                  : "Create Plan"}
+              </button>
+            </form>
+          </section>
+
+          <section className="meal-plan-management-column">
+            <div className="meal-plan-column-heading">
+              <h2>Existing Meal Plans</h2>
+            </div>
+
+            {isLoading ? (
+              <p className="meal-plan-status">
+                Loading meal plans...
+              </p>
+            ) : mealPlans.length === 0 ? (
+              <div className="meal-plan-empty-state">
+                <p>
+                  You don't have any meal plans yet.
+                  Create one to get started.
+                </p>
+              </div>
+            ) : (
+              <ul className="meal-plan-list">
+                {mealPlans.map((mealPlan) => {
+                  const isSelected =
+                    selectedMealPlanId === mealPlan.id;
+
+                  return (
+                    <li
+                      className={[
+                        "meal-plan-list-item",
+                        isSelected
+                          ? "selected-meal-plan"
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      key={mealPlan.id}
+                    >
+                      {editingPlanId ===
+                      mealPlan.id ? (
+                        <form
+                          className="rename-plan-form"
+                          onSubmit={(event) =>
+                            handleUpdatePlan(
+                              event,
+                              mealPlan.id
+                            )
+                          }
+                        >
+                          <div className="rename-plan-field">
+                            <label
+                              htmlFor={`plan-name-${mealPlan.id}`}
+                            >
+                              Meal plan name
+                            </label>
+
+                            <input
+                              id={`plan-name-${mealPlan.id}`}
+                              type="text"
+                              value={editingPlanName}
+                              onChange={(event) =>
+                                setEditingPlanName(
+                                  event.target.value
+                                )
+                              }
+                              maxLength="100"
+                            />
+                          </div>
+
+                          <div className="rename-plan-actions">
+                            <button
+                              className="save-plan-button"
+                              type="submit"
+                              disabled={
+                                !editingPlanName.trim()
+                              }
+                            >
+                              Save
+                            </button>
+
+                            <button
+                              className="cancel-plan-button"
+                              type="button"
+                              onClick={
+                                handleCancelEditing
+                              }
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <>
+                          <div className="meal-plan-list-info">
+                            <span className="meal-plan-list-name">
+                              {mealPlan.name}
+                            </span>
+
+                            {isSelected && (
+                              <span className="selected-plan-label">
+                                Selected
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="meal-plan-list-actions">
+                            {!isSelected && (
+                              <button
+                                className="select-plan-button"
+                                type="button"
+                                onClick={() =>
+                                  handleSelectPlan(
+                                    mealPlan.id
+                                  )
+                                }
+                              >
+                                Use Plan
+                              </button>
+                            )}
+
+                            <button
+                              className="rename-plan-button"
+                              type="button"
+                              onClick={() =>
+                                handleStartEditing(
+                                  mealPlan
+                                )
+                              }
+                            >
+                              Rename
+                            </button>
+
+                            <button
+                              className="delete-plan-button"
+                              type="button"
+                              onClick={() =>
+                                handleDeletePlan(
+                                  mealPlan.id
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        </div>
+      </section>
+
+      {!isLoading &&
+        mealPlans.length > 0 &&
+        selectedMealPlanId && (
+          <>
+            {isLoadingMeals ? (
+              <p className="meal-plan-status">
+                Loading planned meals...
+              </p>
+            ) : (
+              <WeeklyPlanner
+                mealPlanName={
+                  selectedMealPlan?.name
+                }
+                plannedMeals={plannedMeals}
+                onMoveOrSwapMeal={
+                  handleMoveOrSwapMeal
+                }
+                onCopyMeal={handleCopyMeal}
+                onRemoveMeal={handleRemoveMeal}
+              />
+            )}
+          </>
+        )}
     </main>
   );
 }

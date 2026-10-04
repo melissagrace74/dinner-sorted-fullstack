@@ -1,184 +1,1616 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+:root {
+  --cream: #fffaf5;
+  --charcoal: #2d2d2d;
+  --muted-text: #6b665f;
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+  --terracotta: #b5563a;
+  --terracotta-dark: #94452f;
+
+  --sage: #708467;
+  --sage-dark: #586b51;
+
+  --gold: #d1a14b;
+
+  --pale-sage: #e8eee5;
+  --blush: #f8e8e0;
+  --pale-gold: #faf1da;
+
+  --white: #ffffff;
+  --border: #e5ded7;
+  --input-border: #cfc5bd;
+
+  --disabled-bg: #e5e5e5;
+  --disabled-text: #999999;
+  --disabled-border: #d5d5d5;
+
+  --error: #b42318;
 }
 
-.hero {
-  position: relative;
 
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
+/* Header */
 
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--cream);
 }
 
-#center {
+.site-title {
+  color: var(--terracotta);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: var(--terracotta-dark);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: var(--charcoal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--terracotta);
+  text-decoration: underline;
+}
+
+.user-greeting {
+  color: var(--sage-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.nav-button {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--terracotta);
+  border-radius: 6px;
+  background-color: var(--blush);
+  color: var(--terracotta-dark);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background-color: var(--terracotta);
+  color: var(--white);
+}
+
+
+/* Main Layout */
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+main h1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--charcoal);
+}
+
+main h2 {
+  margin-bottom: 0.5rem;
+  color: var(--charcoal);
+}
+
+main p {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.home-intro > p,
+.meal-plan-intro > p {
+  max-width: 650px;
+  margin-right: auto;
+  margin-left: auto;
+  color: var(--muted-text);
+}
+
+
+/* Authentication */
+
+.auth-page {
+  display: flex;
+  max-width: 900px;
+  justify-content: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 2rem;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background-color: var(--white);
+  box-shadow: 0 8px 24px rgba(45, 45, 45, 0.06);
+  text-align: left;
+}
+
+.auth-heading {
+  margin-bottom: 1.75rem;
+  text-align: center;
+}
+
+.auth-heading h1 {
+  margin: 0 0 0.5rem;
+  color: var(--terracotta);
+  font-size: 2rem;
+}
+
+.auth-heading p {
+  margin: 0 auto;
+  color: var(--muted-text);
+  line-height: 1.5;
+}
+
+.auth-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  gap: 1rem;
+  margin: 0;
 }
 
-#next-steps {
+.auth-field {
   display: flex;
-  border-top: 1px solid var(--border);
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.auth-field label {
+  color: var(--charcoal);
+  font-weight: 600;
+}
+
+.auth-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background-color: var(--white);
+  color: var(--charcoal);
+  font: inherit;
+}
+
+.auth-field input:focus {
+  border-color: var(--sage);
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+.auth-error {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e6b8ae;
+  border-radius: 6px;
+  background-color: var(--blush);
+  color: var(--error);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.auth-submit-button {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--terracotta);
+  color: var(--white);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.auth-submit-button:hover:not(:disabled) {
+  background-color: var(--terracotta-dark);
+}
+
+.auth-submit-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.auth-submit-button:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin: 1.5rem 0 0;
+  color: var(--muted-text);
+  text-align: center;
+}
+
+.auth-switch a {
+  color: var(--terracotta);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  color: var(--terracotta-dark);
+  text-decoration: underline;
+}
+
+
+/* Search */
+
+.search-wrapper {
+  width: max-content;
+  max-width: 100%;
+  margin: 2rem auto 0;
+}
+
+.search-wrapper form {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.search-field label {
+  display: block;
+  color: var(--charcoal);
+  font-weight: 600;
   text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+.search-field input {
+  width: 320px;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background-color: var(--white);
+  color: var(--charcoal);
 }
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
+.search-field input:focus {
+  border-color: var(--sage);
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+.search-wrapper form button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--terracotta);
+  color: var(--white);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.search-wrapper form button:hover:not(:disabled) {
+  background-color: var(--terracotta-dark);
+}
+
+.search-wrapper form button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.search-wrapper form button:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.search-message {
+  width: 320px;
+  max-width: 100%;
+  margin: 0.75rem auto 0;
+  color: var(--error);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+
+/* Recipe Results */
+
+.recipe-results {
+  margin-top: 4rem;
+}
+
+.recipe-results > h2 {
+  color: var(--terracotta);
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.recipe-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--white);
+  text-align: left;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--terracotta);
+  box-shadow: 0 6px 16px rgba(181, 86, 58, 0.14);
+}
+
+.recipe-card-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.recipe-card-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.recipe-card-link:focus-visible {
+  outline: 3px solid var(--sage);
+  outline-offset: -3px;
+}
+
+.recipe-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.recipe-card-content {
+  padding: 1rem;
+}
+
+
+/* Shared Recipe Card Typography */
+
+.recipe-card-content h3,
+.planned-meal-name {
+  margin: 0 0 0.5rem;
+  color: var(--charcoal);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.recipe-card-meta,
+.planned-meal-meta {
+  color: var(--muted-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.recipe-card-meta p,
+.planned-meal-meta p {
+  margin: 0 0 0.2rem;
+}
+
+.recipe-card-meta p:last-child,
+.planned-meal-meta p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Recipe Details */
+
+.recipe-details-page {
+  max-width: 900px;
+  text-align: left;
+}
+
+.recipe-details-back {
+  margin-bottom: 1.5rem;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  background-color: var(--sage);
+  color: var(--white);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.back-link:hover {
+  background-color: var(--sage-dark);
+}
+
+.recipe-details {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background-color: var(--white);
+}
+
+.recipe-details-image {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+}
+
+.recipe-details-content {
+  padding: 2rem;
+}
+
+.recipe-details-content > h1 {
+  margin: 0 0 0.5rem;
+  color: var(--terracotta);
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.recipe-meta {
+  margin-bottom: 2rem;
+  color: var(--muted-text);
+}
+
+.recipe-meta p {
+  margin: 0 0 0.2rem;
+}
+
+.recipe-meta p:last-child {
+  margin-bottom: 0;
+}
+
+.recipe-section {
+  margin-top: 2.5rem;
+}
+
+.recipe-section h2,
+.add-to-plan h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--sage);
+}
+
+.ingredient-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 2rem;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.ingredient-list li {
+  padding-left: 0.25rem;
+  color: var(--charcoal);
+}
+
+.instruction-list p {
+  margin-bottom: 1rem;
+  color: var(--charcoal);
+  line-height: 1.7;
+}
+
+.instruction-list p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Add to Meal Plan */
+
+.add-to-plan {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--pale-sage);
+}
+
+.add-to-plan > p {
+  margin-bottom: 0;
+}
+
+.add-to-plan a:not(.back-link) {
+  color: var(--terracotta-dark);
+  font-weight: 600;
+}
+
+.add-to-plan-form {
   display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+  margin: 0;
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
+.add-to-plan-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
 }
 
-.ticks {
+.add-to-plan-field label {
+  color: var(--charcoal);
+  font-weight: 600;
+  text-align: left;
+}
+
+
+/* Add to Meal Plan Dropdown */
+
+.add-to-plan-field select {
+  width: 100%;
+  max-width: 360px;
+  padding: 0.75rem 2.75rem 0.75rem 1rem;
+  border: 1px solid var(--sage);
+  border-radius: 6px;
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: var(--white);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      var(--sage-dark) 50%
+    ),
+    linear-gradient(
+      135deg,
+      var(--sage-dark) 50%,
+      transparent 50%
+    );
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+
+  color: var(--charcoal);
+  cursor: pointer;
+}
+
+.add-to-plan-field select:hover {
+  border-color: var(--sage-dark);
+  outline-color: var(--sage-dark);
+}
+
+.add-to-plan-field select:focus {
+  border-color: var(--sage-dark);
+  outline-color: var(--sage-dark);
+}
+
+
+/* Day Selection */
+
+.meal-plan-days {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.meal-plan-days legend {
+  margin-bottom: 0.65rem;
+  padding: 0;
+  color: var(--charcoal);
+  font-weight: 600;
+}
+
+.day-button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.add-to-plan-form .day-button {
+  width: auto;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--sage);
+  border-radius: 6px;
+  background-color: var(--white);
+  color: var(--sage-dark);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.add-to-plan-form .day-button:hover:not(:disabled) {
+  border-color: var(--sage-dark);
+  background-color: var(--pale-sage);
+  color: var(--sage-dark);
+}
+
+.add-to-plan-form .day-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.add-to-plan-form .day-button.selected-day {
+  border-color: var(--sage-dark);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.add-to-plan-form .day-button.selected-day:hover:not(:disabled) {
+  background-color: var(--sage-dark);
+  color: var(--white);
+}
+
+.add-to-plan-form .day-button:disabled {
+  border-color: var(--disabled-border);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.day-check {
+  margin-right: 0.35rem;
+  font-weight: 700;
+}
+
+.day-loading {
+  margin: 0.75rem 0 0;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+}
+
+.add-to-plan-form .add-to-plan-button {
+  align-self: flex-start;
+  width: auto;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--terracotta);
+  color: var(--white);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.add-to-plan-form .add-to-plan-button:hover:not(:disabled) {
+  background-color: var(--terracotta-dark);
+}
+
+.add-to-plan-form .add-to-plan-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.add-to-plan-form .add-to-plan-button:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.add-to-plan-success {
+  margin: 1rem 0 0;
+  color: var(--sage-dark);
+  font-weight: 600;
+}
+
+.add-to-plan-error {
+  margin: 1rem 0 0;
+  color: var(--error);
+}
+
+
+/* Meal Plan Management */
+
+.meal-plan-page {
+  max-width: 1000px;
+}
+
+.meal-plan-intro {
+  margin-bottom: 1.35rem;
+}
+
+.meal-plan-management {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background-color: var(--white);
+  text-align: left;
+}
+
+.meal-plan-management-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.8fr)
+    minmax(0, 1.2fr);
+  gap: 2.5rem;
+}
+
+.meal-plan-management-column {
+  min-width: 0;
+}
+
+.meal-plan-column-heading {
+  margin-bottom: 1rem;
+}
+
+.meal-plan-column-heading h2 {
+  margin: 0;
+  color: var(--charcoal);
+  font-size: 1.15rem;
+}
+
+
+/* Create Meal Plan */
+
+.create-plan-form {
+  display: grid;
+  justify-content: start;
+  justify-items: start;
+  align-items: start;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+}
+
+.create-plan-field {
+  display: flex;
+  width: 280px;
+  max-width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.create-plan-field input,
+.rename-plan-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background-color: var(--white);
+  color: var(--charcoal);
+}
+
+.create-plan-field input:focus,
+.rename-plan-field input:focus {
+  border-color: var(--sage);
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+.create-plan-button {
+  width: 280px;
+  max-width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--terracotta);
+  color: var(--white);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.create-plan-button:hover:not(:disabled) {
+  background-color: var(--terracotta-dark);
+}
+
+.create-plan-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.create-plan-button:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+
+/* Meal Plan Messages */
+
+.meal-plan-error {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e6b8ae;
+  border-radius: 8px;
+  background-color: var(--blush);
+  color: var(--error);
+  font-size: 0.95rem;
+}
+
+.meal-plan-status {
+  margin: 1rem 0;
+  color: var(--muted-text);
+  text-align: center;
+}
+
+.meal-plan-empty-state {
+  padding: 1rem;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background-color: var(--cream);
+  text-align: center;
+}
+
+.meal-plan-empty-state p {
+  margin: 0;
+  color: var(--muted-text);
+}
+
+
+/* Existing Meal Plans */
+
+.meal-plan-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.meal-plan-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--cream);
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.meal-plan-list-item.selected-meal-plan {
+  border-color: var(--sage);
+  background-color: var(--pale-sage);
+  box-shadow: 0 0 0 1px rgba(112, 132, 103, 0.12);
+}
+
+.meal-plan-list-info {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.meal-plan-list-name {
+  overflow-wrap: anywhere;
+  color: var(--charcoal);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.selected-plan-label {
+  flex-shrink: 0;
+  padding: 0.28rem 0.5rem;
+  border-radius: 999px;
+  background-color: var(--sage);
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.meal-plan-list-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meal-plan-list-actions button,
+.rename-plan-actions button {
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.select-plan-button {
+  border: 1px solid var(--sage);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.select-plan-button:hover {
+  border-color: var(--sage-dark);
+  background-color: var(--sage-dark);
+}
+
+.rename-plan-button {
+  border: 1px solid var(--sage);
+  background-color: var(--white);
+  color: var(--sage-dark);
+}
+
+.rename-plan-button:hover {
+  border-color: var(--sage-dark);
+  background-color: var(--pale-sage);
+}
+
+.delete-plan-button {
+  border: 1px solid var(--terracotta);
+  background-color: var(--white);
+  color: var(--terracotta);
+}
+
+.delete-plan-button:hover {
+  background-color: var(--blush);
+  color: var(--terracotta-dark);
+}
+
+
+/* Rename Meal Plan */
+
+.rename-plan-form {
+  display: grid;
+  width: 100%;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.rename-plan-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.rename-plan-field label {
+  color: var(--charcoal);
+  font-weight: 600;
+  text-align: left;
+}
+
+.rename-plan-actions {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.save-plan-button {
+  border: 1px solid var(--sage);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.save-plan-button:hover:not(:disabled) {
+  border-color: var(--sage-dark);
+  background-color: var(--sage-dark);
+}
+
+.save-plan-button:disabled {
+  border-color: var(--disabled-border);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.cancel-plan-button {
+  border: 1px solid var(--input-border);
+  background-color: var(--white);
+  color: var(--charcoal);
+}
+
+.cancel-plan-button:hover {
+  border-color: var(--sage);
+  background-color: var(--pale-sage);
+}
+
+
+/* Weekly Planner */
+
+.weekly-planner {
+  margin-top: 4rem;
+}
+
+.planner-heading {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.planner-heading h2 {
+  margin: 0;
+  color: var(--terracotta);
+  font-size: 1.75rem;
+}
+
+.desktop-drag-tip {
+  margin: 0 0 1.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--sage);
+  border-radius: 8px;
+  background-color: var(--pale-sage);
+  color: var(--sage-dark);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.planner-day {
+  display: flex;
+  min-width: 0;
+  min-height: 330px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--white);
+  text-align: left;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background-color 0.2s;
+}
+
+.planner-day.drag-over {
+  border-color: var(--sage);
+  background-color: var(--pale-sage);
+  box-shadow: 0 0 0 2px var(--sage);
+}
+
+.planner-day > h3 {
+  margin: 0;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--sage-dark);
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.planned-meal {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  cursor: grab;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.planned-meal:active {
+  cursor: grabbing;
+}
+
+.planned-meal.is-dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.planned-meal-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  user-select: none;
+}
+
+.planned-meal-content {
+  flex: 1;
+  padding: 1rem;
+  text-align: left;
+}
+
+.planned-meal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0 1rem 1rem;
+}
+
+.planned-meal-actions button {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.planner-move-button {
+  display: none;
+  border: 1px solid var(--sage);
+  background-color: var(--pale-sage);
+  color: var(--sage-dark);
+}
+
+.planner-move-button:hover {
+  border-color: var(--sage-dark);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.planner-copy-button {
+  border: 1px solid var(--sage);
+  background-color: var(--pale-sage);
+  color: var(--sage-dark);
+}
+
+.planner-copy-button:hover:not(:disabled) {
+  border-color: var(--sage-dark);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.planner-copy-button:disabled {
+  border-color: var(--disabled-border);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.planner-remove-button {
+  border: 1px solid var(--terracotta);
+  background-color: var(--white);
+  color: var(--terracotta);
+}
+
+.planner-remove-button:hover {
+  background-color: var(--blush);
+  color: var(--terracotta-dark);
+}
+
+
+/* Empty Planner Day */
+
+.planner-empty {
+  display: flex;
+  flex: 1;
+  min-height: 230px;
+  margin: 1rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background-color: var(--cream);
+  color: var(--terracotta);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.planner-empty:hover {
+  background-color: var(--blush);
+  color: var(--terracotta-dark);
+  text-decoration: none;
+}
+
+
+/* Planner Move, Swap, and Copy Forms */
+
+.move-meal-form,
+.copy-meal-form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.move-meal-form label,
+.copy-meal-form label {
+  color: var(--charcoal);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.move-meal-form select,
+.copy-meal-form select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.7rem 2.75rem 0.7rem 0.75rem;
+  border: 1px solid var(--sage);
+  border-radius: 6px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: var(--white);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      var(--sage-dark) 50%
+    ),
+    linear-gradient(
+      135deg,
+      var(--sage-dark) 50%,
+      transparent 50%
+    );
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+
+  color: var(--charcoal);
+  cursor: pointer;
+}
+
+.move-meal-form select:hover,
+.copy-meal-form select:hover {
+  border-color: var(--sage-dark);
+}
+
+.move-meal-form select:focus,
+.copy-meal-form select:focus {
+  border-color: var(--sage);
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+.move-meal-actions,
+.copy-meal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.move-meal-actions button,
+.copy-meal-actions button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.7rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.planner-save-button,
+.planner-copy-save-button {
+  border: 1px solid var(--sage);
+  background-color: var(--sage);
+  color: var(--white);
+}
+
+.planner-save-button:hover:not(:disabled),
+.planner-copy-save-button:hover:not(:disabled) {
+  background-color: var(--sage-dark);
+}
+
+.planner-copy-save-button:disabled {
+  border-color: var(--disabled-border);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.planner-cancel-button {
+  border: 1px solid var(--input-border);
+  background-color: var(--white);
+  color: var(--charcoal);
+}
+
+.planner-cancel-button:hover {
+  border-color: var(--sage);
+  background-color: var(--pale-sage);
+}
+
+
+/* Recipe Video */
+
+.recipe-video {
+  margin-bottom: 0;
+}
+
+.video-wrapper {
   position: relative;
   width: 100%;
+  padding-top: 56.25%;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: var(--charcoal);
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+.video-wrapper iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
+/* Recipe Error */
+
+.recipe-error {
+  text-align: center;
+}
+
+.recipe-error p {
+  color: var(--error);
+}
+
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .recipe-grid,
+  .planner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .meal-plan-management-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  .meal-plan-management-column +
+  .meal-plan-management-column {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .site-title {
+    text-align: center;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    display: block;
+    text-align: center;
+  }
+
+  main {
+    padding: 2rem 1.25rem;
+  }
+
+
+  /* Authentication */
+
+  .auth-page {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .auth-card {
+    max-width: none;
+    padding: 1.5rem;
+  }
+
+  .auth-heading h1 {
+    font-size: 1.7rem;
+  }
+
+
+  /* Search */
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-wrapper form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .search-field input,
+  .search-wrapper form button,
+  .search-message {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* Recipe Results and Details */
+
+  .recipe-grid,
+  .planner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-details-page {
+    padding: 2rem 1.25rem;
+  }
+
+  .recipe-details-content {
+    padding: 1.5rem;
+  }
+
+  .recipe-details-content > h1 {
+    font-size: 1.7rem;
+  }
+
+  .ingredient-list {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Add to Meal Plan */
+
+  .add-to-plan {
+    padding: 1.25rem;
+  }
+
+  .add-to-plan-form,
+  .add-to-plan-field {
+    width: 100%;
+  }
+
+  .add-to-plan-field select {
+    max-width: none;
+  }
+
+  .day-button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .add-to-plan-form .day-button {
+    width: 100%;
+  }
+
+  .add-to-plan-form .add-to-plan-button {
+    align-self: stretch;
+    width: 100%;
+  }
+
+
+  /* Meal Plan Management */
+
+  .meal-plan-intro {
+    margin-bottom: 1.15rem;
+  }
+
+  .meal-plan-management {
+    padding: 1.25rem;
+  }
+
+  .meal-plan-management-grid {
+    gap: 1.5rem;
+  }
+
+  .create-plan-form {
+    width: 100%;
+  }
+
+  .create-plan-field,
+  .create-plan-button {
+    width: 100%;
+    max-width: none;
+  }
+
+  .meal-plan-list-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .meal-plan-list-info {
+    justify-content: space-between;
+  }
+
+  .meal-plan-list-actions,
+  .rename-plan-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .meal-plan-list-actions button,
+  .rename-plan-actions button {
+    width: 100%;
+  }
+
+
+  /* Weekly Planner */
+
+  .desktop-drag-tip {
+    display: none;
+  }
+
+  .planner-day {
+    min-height: 0;
+  }
+
+  .planned-meal {
+    cursor: default;
+  }
+
+  .planner-move-button {
+    display: block;
+  }
+
+  .planner-empty {
+    min-height: 150px;
   }
 }
