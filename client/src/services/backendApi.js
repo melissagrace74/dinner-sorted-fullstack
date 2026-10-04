@@ -125,6 +125,22 @@ export async function updatePlannedMeal(plannedMealId, updates) {
 }
 
 
+export async function moveOrSwapPlannedMeal(
+  plannedMealId,
+  day
+) {
+  return apiRequest(
+    `/planned-meals/${plannedMealId}/move`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        day,
+      }),
+    }
+  );
+}
+
+
 export async function deletePlannedMeal(plannedMealId) {
   return apiRequest(`/planned-meals/${plannedMealId}`, {
     method: "DELETE",

@@ -27,6 +27,10 @@ function Header() {
 
         {user ? (
           <>
+            <Link to="/meal-plans">
+              Meal Plans
+            </Link>
+
             <span>Hi, {user.username}</span>
 
             <button type="button" onClick={handleLogout}>

@@ -5,7 +5,7 @@ import { DAYS } from "../constants/days";
 
 function WeeklyPlanner({
   plannedMeals,
-  onMoveMeal,
+  onMoveOrSwapMeal,
   onRemoveMeal,
 }) {
   const [movingMealId, setMovingMealId] = useState(null);
@@ -27,7 +27,7 @@ function WeeklyPlanner({
     setSelectedDay("");
   }
 
-  async function handleMoveMeal(event, plannedMeal) {
+  async function handleMoveOrSwap(event, plannedMeal) {
     event.preventDefault();
 
     if (!selectedDay || selectedDay === plannedMeal.day) {
@@ -35,12 +35,12 @@ function WeeklyPlanner({
       return;
     }
 
-    const wasMoved = await onMoveMeal(
+    const wasSuccessful = await onMoveOrSwapMeal(
       plannedMeal.id,
       selectedDay
     );
 
-    if (wasMoved) {
+    if (wasSuccessful) {
       cancelMovingMeal();
     }
   }
@@ -71,11 +71,11 @@ function WeeklyPlanner({
                   {movingMealId === plannedMeal.id ? (
                     <form
                       onSubmit={(event) =>
-                        handleMoveMeal(event, plannedMeal)
+                        handleMoveOrSwap(event, plannedMeal)
                       }
                     >
                       <label htmlFor={`move-meal-${plannedMeal.id}`}>
-                        Move to
+                        Move or swap with
                       </label>
 
                       <select
@@ -86,26 +86,26 @@ function WeeklyPlanner({
                         }
                       >
                         {DAYS.map((moveDay) => {
-                          const dayIsOccupied = plannedMeals.some(
-                            (meal) =>
-                              meal.day === moveDay &&
-                              meal.id !== plannedMeal.id
-                          );
+                          const destinationMeal =
+                            getMealForDay(moveDay);
 
                           return (
                             <option
                               key={moveDay}
                               value={moveDay}
-                              disabled={dayIsOccupied}
                             >
                               {moveDay}
+                              {destinationMeal &&
+                              destinationMeal.id !== plannedMeal.id
+                                ? ` — swap with ${destinationMeal.meal_name}`
+                                : ""}
                             </option>
                           );
                         })}
                       </select>
 
                       <button type="submit">
-                        Save Move
+                        Save
                       </button>
 
                       <button
@@ -121,7 +121,7 @@ function WeeklyPlanner({
                         type="button"
                         onClick={() => startMovingMeal(plannedMeal)}
                       >
-                        Move
+                        Move / Swap
                       </button>
 
                       <button

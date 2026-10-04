@@ -8,8 +8,8 @@ import {
   deletePlannedMeal,
   getMealPlans,
   getPlannedMeals,
+  moveOrSwapPlannedMeal,
   updateMealPlan,
-  updatePlannedMeal,
 } from "../services/backendApi";
 
 
@@ -179,23 +179,23 @@ function MealPlanPage() {
     }
   }
 
-  async function handleMoveMeal(plannedMealId, newDay) {
+  async function handleMoveOrSwapMeal(plannedMealId, newDay) {
     setError("");
 
     try {
-      const data = await updatePlannedMeal(
+      const data = await moveOrSwapPlannedMeal(
         plannedMealId,
-        {
-          day: newDay,
-        }
+        newDay
       );
 
       setPlannedMeals((currentMeals) =>
-        currentMeals.map((plannedMeal) =>
-          plannedMeal.id === plannedMealId
-            ? data.planned_meal
-            : plannedMeal
-        )
+        currentMeals.map((currentMeal) => {
+          const updatedMeal = data.planned_meals.find(
+            (meal) => meal.id === currentMeal.id
+          );
+
+          return updatedMeal || currentMeal;
+        })
       );
 
       return true;
@@ -355,7 +355,7 @@ function MealPlanPage() {
           ) : (
             <WeeklyPlanner
               plannedMeals={plannedMeals}
-              onMoveMeal={handleMoveMeal}
+              onMoveOrSwapMeal={handleMoveOrSwapMeal}
               onRemoveMeal={handleRemoveMeal}
             />
           )}

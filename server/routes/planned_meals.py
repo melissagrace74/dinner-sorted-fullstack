@@ -196,6 +196,72 @@ def update_planned_meal(planned_meal_id):
 
 
 @planned_meals_bp.route(
+    "/planned-meals/<int:planned_meal_id>/move",
+    methods=["PATCH"],
+)
+@login_required
+def move_or_swap_planned_meal(planned_meal_id):
+    planned_meal = get_owned_planned_meal(planned_meal_id)
+
+    if not planned_meal:
+        return jsonify({"error": "Planned meal not found"}), 404
+
+    data = request.get_json() or {}
+    new_day = str(data.get("day", "")).strip()
+
+    if new_day not in VALID_DAYS:
+        return jsonify({"error": "A valid day is required"}), 400
+
+    if new_day == planned_meal.day:
+        return jsonify(
+            {
+                "planned_meals": [
+                    planned_meal.to_dict()
+                ]
+            }
+        ), 200
+
+    destination_meal = PlannedMeal.query.filter_by(
+        meal_plan_id=planned_meal.meal_plan_id,
+        day=new_day,
+    ).first()
+
+    original_day = planned_meal.day
+
+    if destination_meal:
+        temporary_day = f"__swap_{planned_meal.id}__"
+
+        planned_meal.day = temporary_day
+        db.session.flush()
+
+        destination_meal.day = original_day
+        db.session.flush()
+
+        planned_meal.day = new_day
+        db.session.commit()
+
+        return jsonify(
+            {
+                "planned_meals": [
+                    planned_meal.to_dict(),
+                    destination_meal.to_dict(),
+                ]
+            }
+        ), 200
+
+    planned_meal.day = new_day
+    db.session.commit()
+
+    return jsonify(
+        {
+            "planned_meals": [
+                planned_meal.to_dict()
+            ]
+        }
+    ), 200
+
+
+@planned_meals_bp.route(
     "/planned-meals/<int:planned_meal_id>",
     methods=["DELETE"],
 )

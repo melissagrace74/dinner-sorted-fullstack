@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import {
   createPlannedMeal,
   getMealPlans,
+  getPlannedMeals,
 } from "../services/backendApi";
 
 
@@ -13,10 +14,14 @@ function AddToMealPlan({ meal }) {
   const { user } = useAuth();
 
   const [mealPlans, setMealPlans] = useState([]);
+  const [plannedMeals, setPlannedMeals] = useState([]);
   const [selectedMealPlanId, setSelectedMealPlanId] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMeals, setIsLoadingMeals] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -31,6 +36,7 @@ function AddToMealPlan({ meal }) {
 
       try {
         const data = await getMealPlans();
+
         setMealPlans(data.meal_plans);
 
         if (data.meal_plans.length > 0) {
@@ -48,6 +54,33 @@ function AddToMealPlan({ meal }) {
     loadMealPlans();
   }, [user]);
 
+  useEffect(() => {
+    if (!selectedMealPlanId) {
+      setPlannedMeals([]);
+      return;
+    }
+
+    async function loadPlannedMeals() {
+      setIsLoadingMeals(true);
+      setError("");
+
+      try {
+        const data = await getPlannedMeals(
+          Number(selectedMealPlanId)
+        );
+
+        setPlannedMeals(data.planned_meals);
+      } catch (error) {
+        setPlannedMeals([]);
+        setError(error.message);
+      } finally {
+        setIsLoadingMeals(false);
+      }
+    }
+
+    loadPlannedMeals();
+  }, [selectedMealPlanId]);
+
   async function handleAddMeal(event) {
     event.preventDefault();
 
@@ -60,7 +93,7 @@ function AddToMealPlan({ meal }) {
     setSuccessMessage("");
 
     try {
-      await createPlannedMeal(
+      const data = await createPlannedMeal(
         Number(selectedMealPlanId),
         {
           day: selectedDay,
@@ -69,6 +102,11 @@ function AddToMealPlan({ meal }) {
           thumbnail: meal.strMealThumb,
         }
       );
+
+      setPlannedMeals((currentMeals) => [
+        ...currentMeals,
+        data.planned_meal,
+      ]);
 
       setSuccessMessage(
         `${meal.strMeal} was added to ${selectedDay}.`
@@ -135,6 +173,7 @@ function AddToMealPlan({ meal }) {
             value={selectedMealPlanId}
             onChange={(event) => {
               setSelectedMealPlanId(event.target.value);
+              setSelectedDay("");
               setSuccessMessage("");
               setError("");
             }}
@@ -163,19 +202,30 @@ function AddToMealPlan({ meal }) {
               setSuccessMessage("");
               setError("");
             }}
+            disabled={isLoadingMeals}
           >
             <option value="">
-              Choose a day
+              {isLoadingMeals
+                ? "Loading days..."
+                : "Choose a day"}
             </option>
 
-            {DAYS.map((day) => (
-              <option
-                key={day}
-                value={day}
-              >
-                {day}
-              </option>
-            ))}
+            {DAYS.map((day) => {
+              const dayIsOccupied = plannedMeals.some(
+                (plannedMeal) => plannedMeal.day === day
+              );
+
+              return (
+                <option
+                  key={day}
+                  value={day}
+                  disabled={dayIsOccupied}
+                >
+                  {day}
+                  {dayIsOccupied ? " — already planned" : ""}
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -183,6 +233,7 @@ function AddToMealPlan({ meal }) {
           type="submit"
           disabled={
             isAdding ||
+            isLoadingMeals ||
             !selectedMealPlanId ||
             !selectedDay
           }
