@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 from extensions import db, migrate
-from models import User
+from models import MealPlan, PlannedMeal, User
 
 
 load_dotenv()
