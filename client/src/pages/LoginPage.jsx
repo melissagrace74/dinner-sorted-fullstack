@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -7,11 +11,14 @@ import { useAuth } from "../context/AuthContext";
 function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const destination = location.state?.from?.pathname || "/";
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -21,7 +28,7 @@ function LoginPage() {
 
     try {
       await login(username, password);
-      navigate("/");
+      navigate(destination, { replace: true });
     } catch (error) {
       setError(error.message);
     } finally {

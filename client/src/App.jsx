@@ -6,10 +6,13 @@ import {
 } from "react-router-dom";
 
 import Header from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import MealPlanPage from "./pages/MealPlanPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 import SignupPage from "./pages/SignupPage";
 
 
@@ -32,12 +35,22 @@ function App() {
         <Route path="/" element={<HomePage />} />
 
         <Route
-          path="/login"
+          path="/recipes/:mealId"
+          element={<RecipeDetailsPage />}
+        />
+
+        <Route
+          path="/meal-plans"
           element={
-            user
-              ? <Navigate to="/" replace />
-              : <LoginPage />
+            <ProtectedRoute>
+              <MealPlanPage />
+            </ProtectedRoute>
           }
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
         />
 
         <Route
