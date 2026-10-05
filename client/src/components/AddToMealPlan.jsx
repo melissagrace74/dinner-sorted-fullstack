@@ -2,21 +2,28 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { DAYS } from "../constants/days";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/useAuth";
 import {
   createPlannedMeal,
   getMealPlans,
   getPlannedMeals,
 } from "../services/backendApi";
 
+
+const ACTIVE_MEAL_PLAN_KEY =
+  "dinnerSortedActiveMealPlanId";
+
+
 function AddToMealPlan({ meal }) {
   const { user } = useAuth();
 
   const [mealPlans, setMealPlans] = useState([]);
   const [plannedMeals, setPlannedMeals] = useState([]);
+
   const [selectedMealPlanId, setSelectedMealPlanId] =
     useState("");
-  const [selectedDay, setSelectedDay] = useState("");
+
+  const [selectedDays, setSelectedDays] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMeals, setIsLoadingMeals] =
@@ -26,6 +33,7 @@ function AddToMealPlan({ meal }) {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] =
     useState("");
+
 
   useEffect(() => {
     if (!user) {
@@ -38,12 +46,29 @@ function AddToMealPlan({ meal }) {
 
       try {
         const data = await getMealPlans();
+        const plans = data.meal_plans;
 
-        setMealPlans(data.meal_plans);
+        setMealPlans(plans);
 
-        if (data.meal_plans.length > 0) {
-          setSelectedMealPlanId(
-            String(data.meal_plans[0].id)
+        if (plans.length > 0) {
+          const savedPlanId = sessionStorage.getItem(
+            ACTIVE_MEAL_PLAN_KEY
+          );
+
+          const savedPlanExists = plans.some(
+            (mealPlan) =>
+              String(mealPlan.id) === savedPlanId
+          );
+
+          const initialPlanId = savedPlanExists
+            ? savedPlanId
+            : String(plans[0].id);
+
+          setSelectedMealPlanId(initialPlanId);
+
+          sessionStorage.setItem(
+            ACTIVE_MEAL_PLAN_KEY,
+            initialPlanId
           );
         }
       } catch (error) {
@@ -56,11 +81,13 @@ function AddToMealPlan({ meal }) {
     loadMealPlans();
   }, [user]);
 
+
   useEffect(() => {
     if (!selectedMealPlanId) {
-      setPlannedMeals([]);
       return;
     }
+
+    let isCancelled = false;
 
     async function loadPlannedMeals() {
       setIsLoadingMeals(true);
@@ -71,22 +98,68 @@ function AddToMealPlan({ meal }) {
           Number(selectedMealPlanId)
         );
 
-        setPlannedMeals(data.planned_meals);
+        if (!isCancelled) {
+          setPlannedMeals(data.planned_meals);
+        }
       } catch (error) {
-        setPlannedMeals([]);
-        setError(error.message);
+        if (!isCancelled) {
+          setPlannedMeals([]);
+          setError(error.message);
+        }
       } finally {
-        setIsLoadingMeals(false);
+        if (!isCancelled) {
+          setIsLoadingMeals(false);
+        }
       }
     }
 
     loadPlannedMeals();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [selectedMealPlanId]);
+
+
+  function handleMealPlanChange(event) {
+    const mealPlanId = event.target.value;
+
+    setSelectedMealPlanId(mealPlanId);
+    setPlannedMeals([]);
+    setSelectedDays([]);
+    setSuccessMessage("");
+    setError("");
+
+    sessionStorage.setItem(
+      ACTIVE_MEAL_PLAN_KEY,
+      mealPlanId
+    );
+  }
+
+
+  function handleDayToggle(day) {
+    setSelectedDays((currentDays) => {
+      if (currentDays.includes(day)) {
+        return currentDays.filter(
+          (selectedDay) => selectedDay !== day
+        );
+      }
+
+      return [...currentDays, day];
+    });
+
+    setSuccessMessage("");
+    setError("");
+  }
+
 
   async function handleAddMeal(event) {
     event.preventDefault();
 
-    if (!selectedMealPlanId || !selectedDay) {
+    if (
+      !selectedMealPlanId ||
+      selectedDays.length === 0
+    ) {
       return;
     }
 
@@ -95,32 +168,51 @@ function AddToMealPlan({ meal }) {
     setSuccessMessage("");
 
     try {
-      const data = await createPlannedMeal(
-        Number(selectedMealPlanId),
-        {
-          day: selectedDay,
-          mealdb_id: meal.idMeal,
-          meal_name: meal.strMeal,
-          thumbnail: meal.strMealThumb,
-        }
-      );
+      const addedMeals = [];
+
+      for (const day of selectedDays) {
+        const data = await createPlannedMeal(
+          Number(selectedMealPlanId),
+          {
+            day,
+            mealdb_id: meal.idMeal,
+            meal_name: meal.strMeal,
+            thumbnail: meal.strMealThumb,
+          }
+        );
+
+        addedMeals.push(data.planned_meal);
+      }
 
       setPlannedMeals((currentMeals) => [
         ...currentMeals,
-        data.planned_meal,
+        ...addedMeals,
       ]);
 
-      setSuccessMessage(
-        `${meal.strMeal} was added to ${selectedDay}.`
+      const orderedSelectedDays = DAYS.filter((day) =>
+        selectedDays.includes(day)
       );
 
-      setSelectedDay("");
+      if (orderedSelectedDays.length === 1) {
+        setSuccessMessage(
+          `${meal.strMeal} was added to ${orderedSelectedDays[0]}.`
+        );
+      } else {
+        setSuccessMessage(
+          `${meal.strMeal} was added to ${orderedSelectedDays.join(
+            ", "
+          )}.`
+        );
+      }
+
+      setSelectedDays([]);
     } catch (error) {
       setError(error.message);
     } finally {
       setIsAdding(false);
     }
   }
+
 
   const weekIsFull =
     !isLoadingMeals &&
@@ -129,6 +221,7 @@ function AddToMealPlan({ meal }) {
         (plannedMeal) => plannedMeal.day === day
       )
     );
+
 
   if (!user) {
     return (
@@ -143,14 +236,17 @@ function AddToMealPlan({ meal }) {
     );
   }
 
+
   if (isLoading) {
     return (
       <section className="add-to-plan">
         <h2>Plan Your Week</h2>
+
         <p>Loading your meal plans...</p>
       </section>
     );
   }
+
 
   if (mealPlans.length === 0) {
     return (
@@ -168,6 +264,7 @@ function AddToMealPlan({ meal }) {
     );
   }
 
+
   return (
     <section className="add-to-plan">
       <h2>Plan Your Week</h2>
@@ -184,14 +281,7 @@ function AddToMealPlan({ meal }) {
           <select
             id="add-meal-plan"
             value={selectedMealPlanId}
-            onChange={(event) => {
-              setSelectedMealPlanId(
-                event.target.value
-              );
-              setSelectedDay("");
-              setSuccessMessage("");
-              setError("");
-            }}
+            onChange={handleMealPlanChange}
           >
             {mealPlans.map((mealPlan) => (
               <option
@@ -243,7 +333,7 @@ function AddToMealPlan({ meal }) {
         ) : (
           <>
             <fieldset className="meal-plan-days">
-              <legend>Choose a Day</legend>
+              <legend>Choose Day(s)</legend>
 
               <div className="day-button-grid">
                 {DAYS.map((day) => {
@@ -254,7 +344,7 @@ function AddToMealPlan({ meal }) {
                     );
 
                   const dayIsSelected =
-                    selectedDay === day;
+                    selectedDays.includes(day);
 
                   return (
                     <button
@@ -267,19 +357,16 @@ function AddToMealPlan({ meal }) {
                       type="button"
                       disabled={dayIsOccupied}
                       aria-pressed={dayIsSelected}
-                      onClick={() => {
-                        setSelectedDay(
-                          dayIsSelected ? "" : day
-                        );
-                        setSuccessMessage("");
-                        setError("");
-                      }}
+                      onClick={() =>
+                        handleDayToggle(day)
+                      }
                     >
                       {dayIsSelected && (
                         <span className="day-check">
                           ✓
                         </span>
                       )}
+
                       {day}
                     </button>
                   );
@@ -293,7 +380,7 @@ function AddToMealPlan({ meal }) {
               disabled={
                 isAdding ||
                 !selectedMealPlanId ||
-                !selectedDay
+                selectedDays.length === 0
               }
             >
               {isAdding
@@ -315,5 +402,6 @@ function AddToMealPlan({ meal }) {
     </section>
   );
 }
+
 
 export default AddToMealPlan;

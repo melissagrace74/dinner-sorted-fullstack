@@ -1,0 +1,567 @@
+/* ========================================
+   Dinner, Sorted
+   Meal Plan Page
+======================================== */
+
+.meal-plan-page {
+  width: min(1320px, calc(100% - 4rem));
+  max-width: none;
+  margin: 0 auto;
+  padding: 3.75rem 0 5rem;
+  background-color: transparent;
+}
+
+
+/* ========================================
+   Page Introduction
+======================================== */
+
+.meal-plan-page .meal-plan-intro {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 0 3rem;
+  padding: 0;
+  text-align: left;
+}
+
+.meal-plan-page .meal-plan-page-eyebrow {
+  width: 100%;
+  margin: 0 0 0.55rem;
+  padding: 0;
+  color: #66734f;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.meal-plan-page .meal-plan-intro h1 {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #293728;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: clamp(2.8rem, 4.3vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-align: left;
+}
+
+.meal-plan-page .meal-plan-page-description {
+  width: 100%;
+  max-width: 650px;
+  margin: 1rem 0 0;
+  padding: 0;
+  color: #4b5148;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+
+/* ========================================
+   Error / Status
+======================================== */
+
+.meal-plan-page .meal-plan-error {
+  margin: 0 0 1.25rem;
+  border: 1px solid #e2c1b7;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background-color: #f8eae5;
+  color: #8f3927;
+  text-align: left;
+}
+
+.meal-plan-page .meal-plan-status {
+  margin: 1rem 0;
+  color: #5a6256;
+  text-align: left;
+}
+
+
+/* ========================================
+   Meal Plan Management
+======================================== */
+
+.meal-plan-page .meal-plan-management {
+  width: 100%;
+  margin: 0 0 4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.meal-plan-page .meal-plan-management-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.meal-plan-page .meal-plan-management-column {
+  min-width: 0;
+  margin: 0;
+  padding: 0 2.5rem 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.meal-plan-page
+  .meal-plan-management-column
+  + .meal-plan-management-column {
+  padding: 0 0 0 2.5rem;
+  border-left: 1px solid #ded8cc;
+}
+
+
+/* ========================================
+   Management Headings
+======================================== */
+
+.meal-plan-page .meal-plan-column-heading {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  text-align: left;
+}
+
+.meal-plan-page .meal-plan-column-eyebrow {
+  margin: 0 0 0.35rem;
+  padding: 0;
+  color: #66734f;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.meal-plan-page .meal-plan-column-heading h2 {
+  margin: 0;
+  padding: 0;
+  color: #34472d;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-align: left;
+}
+
+
+/* ========================================
+   Create Plan
+======================================== */
+
+.meal-plan-page .create-plan-form {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.meal-plan-page .create-plan-field {
+  width: min(100%, 420px);
+  margin: 0;
+}
+
+.meal-plan-page .create-plan-field input {
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  border: 1px solid #d6d0c5;
+  border-radius: 7px;
+  padding: 0 0.9rem;
+  box-sizing: border-box;
+  background-color: #fffdf8;
+  color: #293128;
+  font-size: 0.92rem;
+}
+
+.meal-plan-page .create-plan-field input:focus {
+  border-color: #758568;
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(102, 115, 79, 0.12);
+}
+
+.meal-plan-page .create-plan-field input::placeholder {
+  color: #8c8c84;
+}
+
+.meal-plan-page .create-plan-button {
+  min-height: 42px;
+  width: auto;
+  margin: 0;
+  border: 1px solid #b84e31;
+  border-radius: 7px;
+  padding: 0.7rem 1.4rem;
+  background-color: #b84e31;
+  color: #fffdf8;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.meal-plan-page .create-plan-button:hover:not(:disabled) {
+  background-color: #9f3e26;
+}
+
+.meal-plan-page .create-plan-button:disabled {
+  border-color: #d7d2ca;
+  background-color: #d7d2ca;
+  color: #85827d;
+  cursor: not-allowed;
+}
+
+
+/* ========================================
+   Existing Plans
+======================================== */
+
+.meal-plan-page .meal-plan-list {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+}
+
+.meal-plan-page .meal-plan-list-item {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  margin: 0;
+  padding: 0.8rem 0;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 0;
+  border-bottom: 1px solid #e4ded2;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.meal-plan-page .meal-plan-list-item:first-child {
+  padding-top: 0.2rem;
+}
+
+.meal-plan-page .meal-plan-list-item:last-child {
+  border-bottom: 0;
+}
+
+.meal-plan-page .meal-plan-list-item.selected-meal-plan {
+  background: transparent;
+}
+
+.meal-plan-page .meal-plan-list-info {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.meal-plan-page .meal-plan-list-name {
+  color: #303a2e;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.meal-plan-page .selected-plan-label {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.3rem 0.58rem;
+  background-color: #e7ede3;
+  color: #5d7051;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   Existing Plan Actions
+======================================== */
+
+.meal-plan-page .meal-plan-list-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.meal-plan-page .select-plan-button,
+.meal-plan-page .rename-plan-button,
+.meal-plan-page .delete-plan-button,
+.meal-plan-page .save-plan-button,
+.meal-plan-page .cancel-plan-button {
+  min-height: 38px;
+  margin: 0;
+  border-radius: 7px;
+  padding: 0.55rem 0.9rem;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+/* Use Plan / Save */
+
+.meal-plan-page .select-plan-button,
+.meal-plan-page .save-plan-button {
+  border: 1px solid #687b5c;
+  background-color: #687b5c;
+  color: #fffdf8;
+}
+
+.meal-plan-page .select-plan-button:hover,
+.meal-plan-page .save-plan-button:hover:not(:disabled) {
+  border-color: #536749;
+  background-color: #536749;
+}
+
+
+/* Rename / Cancel */
+
+.meal-plan-page .rename-plan-button,
+.meal-plan-page .cancel-plan-button {
+  border: 1px solid #aab2a3;
+  background-color: transparent;
+  color: #56634f;
+}
+
+.meal-plan-page .rename-plan-button:hover,
+.meal-plan-page .cancel-plan-button:hover {
+  border-color: #758568;
+  background-color: #edf1e9;
+  color: #465a40;
+}
+
+
+/* Delete */
+
+.meal-plan-page .delete-plan-button {
+  border: 1px solid #c46a50;
+  background-color: transparent;
+  color: #a9432a;
+}
+
+.meal-plan-page .delete-plan-button:hover {
+  border-color: #b84e31;
+  background-color: #f8eae5;
+  color: #963923;
+}
+
+
+/* ========================================
+   Rename Plan
+======================================== */
+
+.meal-plan-page .rename-plan-form {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.meal-plan-page .rename-plan-field {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+}
+
+.meal-plan-page .rename-plan-field label {
+  display: block;
+  margin: 0 0 0.3rem;
+  color: #5d655a;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.meal-plan-page .rename-plan-field input {
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  border: 1px solid #d6d0c5;
+  border-radius: 7px;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+  background-color: #fffdf8;
+  color: #293128;
+}
+
+.meal-plan-page .rename-plan-field input:focus {
+  border-color: #758568;
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(102, 115, 79, 0.12);
+}
+
+.meal-plan-page .rename-plan-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+/* ========================================
+   Empty State
+======================================== */
+
+.meal-plan-page .meal-plan-empty-state {
+  margin: 0;
+  padding: 0.75rem 0 0;
+  background: transparent;
+  text-align: left;
+}
+
+.meal-plan-page .meal-plan-empty-state p {
+  margin: 0;
+  color: #60675d;
+  line-height: 1.5;
+}
+
+
+/* ========================================
+   Tablet
+======================================== */
+
+@media (max-width: 900px) {
+  .meal-plan-page {
+    width: min(100% - 3rem, 1320px);
+    padding-top: 3rem;
+  }
+
+  .meal-plan-page .meal-plan-management-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-plan-page .meal-plan-management-column {
+    padding: 0 0 2rem;
+  }
+
+  .meal-plan-page
+    .meal-plan-management-column
+    + .meal-plan-management-column {
+    padding: 2rem 0 0;
+    border-top: 1px solid #ded8cc;
+    border-left: 0;
+  }
+}
+
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 600px) {
+  .meal-plan-page {
+    width: calc(100% - 2rem);
+    padding: 2.5rem 0 3.5rem;
+  }
+
+  .meal-plan-page .meal-plan-intro {
+    margin-bottom: 2.25rem;
+  }
+
+  .meal-plan-page .meal-plan-intro h1 {
+    font-size: clamp(2.45rem, 10.5vw, 3.2rem);
+  }
+
+  .meal-plan-page .meal-plan-management {
+    margin-bottom: 3rem;
+  }
+
+  .meal-plan-page .create-plan-field {
+    width: 100%;
+  }
+
+  .meal-plan-page .create-plan-button {
+    width: auto;
+  }
+
+  .meal-plan-page .meal-plan-list-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .meal-plan-page .meal-plan-list-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .meal-plan-page .select-plan-button,
+  .meal-plan-page .rename-plan-button,
+  .meal-plan-page .delete-plan-button {
+    min-height: 40px;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .meal-plan-page .rename-plan-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .meal-plan-page .rename-plan-actions {
+    width: 100%;
+  }
+}

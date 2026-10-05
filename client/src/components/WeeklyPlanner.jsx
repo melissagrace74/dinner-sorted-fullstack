@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { DAYS } from "../constants/days";
 import { getMealById } from "../services/mealApi";
 
+import "./WeeklyPlanner.css";
+
 function WeeklyPlanner({
   mealPlanName,
   plannedMeals,

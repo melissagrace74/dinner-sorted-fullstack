@@ -9,10 +9,12 @@ function RecipeCard({ meal }) {
         to={`/recipes/${meal.idMeal}`}
         aria-label={`View ${meal.strMeal} recipe`}
       >
-        <img
-          src={meal.strMealThumb}
-          alt={meal.strMeal}
-        />
+        <div className="recipe-card-image">
+          <img
+            src={meal.strMealThumb}
+            alt={meal.strMeal}
+          />
+        </div>
 
         <div className="recipe-card-content">
           <h3>{meal.strMeal}</h3>
@@ -37,5 +39,6 @@ function RecipeCard({ meal }) {
     </article>
   );
 }
+
 
 export default RecipeCard;

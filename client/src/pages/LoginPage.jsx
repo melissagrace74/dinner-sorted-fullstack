@@ -5,7 +5,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/useAuth";
+
+import "./AuthPage.css";
 
 function LoginPage() {
   const { login } = useAuth();
@@ -40,6 +42,7 @@ function LoginPage() {
       <section className="auth-card">
         <div className="auth-heading">
           <h1>Log In</h1>
+
           <p>
             Welcome back. Log in to continue planning your week.
           </p>

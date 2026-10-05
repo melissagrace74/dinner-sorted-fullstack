@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import WeeklyPlanner from "../components/WeeklyPlanner";
+
 import {
   createMealPlan,
   createPlannedMeal,
@@ -12,6 +13,13 @@ import {
   updateMealPlan,
 } from "../services/backendApi";
 
+import "./MealPlanPage.css";
+
+
+const ACTIVE_MEAL_PLAN_KEY =
+  "dinnerSortedActiveMealPlanId";
+
+
 function sortMealPlans(plans) {
   return [...plans].sort((a, b) => {
     if (a.created_at && b.created_at) {
@@ -21,6 +29,7 @@ function sortMealPlans(plans) {
     return a.id - b.id;
   });
 }
+
 
 function MealPlanPage() {
   const [mealPlans, setMealPlans] = useState([]);
@@ -37,7 +46,10 @@ function MealPlanPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState("");
 
+
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadMealPlans() {
       setIsLoading(true);
       setError("");
@@ -46,26 +58,58 @@ function MealPlanPage() {
         const data = await getMealPlans();
         const sortedPlans = sortMealPlans(data.meal_plans);
 
+        if (isCancelled) {
+          return;
+        }
+
         setMealPlans(sortedPlans);
 
         if (sortedPlans.length > 0) {
-          setSelectedMealPlanId(sortedPlans[0].id);
+          const savedPlanId = sessionStorage.getItem(
+            ACTIVE_MEAL_PLAN_KEY
+          );
+
+          const savedPlan = sortedPlans.find(
+            (mealPlan) =>
+              String(mealPlan.id) === savedPlanId
+          );
+
+          const initialPlanId = savedPlan
+            ? savedPlan.id
+            : sortedPlans[0].id;
+
+          setSelectedMealPlanId(initialPlanId);
+
+          sessionStorage.setItem(
+            ACTIVE_MEAL_PLAN_KEY,
+            String(initialPlanId)
+          );
         }
       } catch (error) {
-        setError(error.message);
+        if (!isCancelled) {
+          setError(error.message);
+        }
       } finally {
-        setIsLoading(false);
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
       }
     }
 
     loadMealPlans();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
+
 
   useEffect(() => {
     if (!selectedMealPlanId) {
-      setPlannedMeals([]);
       return;
     }
+
+    let isCancelled = false;
 
     async function loadPlannedMeals() {
       setIsLoadingMeals(true);
@@ -76,17 +120,28 @@ function MealPlanPage() {
           selectedMealPlanId
         );
 
-        setPlannedMeals(data.planned_meals);
+        if (!isCancelled) {
+          setPlannedMeals(data.planned_meals);
+        }
       } catch (error) {
-        setPlannedMeals([]);
-        setError(error.message);
+        if (!isCancelled) {
+          setPlannedMeals([]);
+          setError(error.message);
+        }
       } finally {
-        setIsLoadingMeals(false);
+        if (!isCancelled) {
+          setIsLoadingMeals(false);
+        }
       }
     }
 
     loadPlannedMeals();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [selectedMealPlanId]);
+
 
   async function handleCreatePlan(event) {
     event.preventDefault();
@@ -110,7 +165,14 @@ function MealPlanPage() {
         ])
       );
 
+      setPlannedMeals([]);
       setSelectedMealPlanId(data.meal_plan.id);
+
+      sessionStorage.setItem(
+        ACTIVE_MEAL_PLAN_KEY,
+        String(data.meal_plan.id)
+      );
+
       setNewPlanName("");
     } catch (error) {
       setError(error.message);
@@ -119,12 +181,20 @@ function MealPlanPage() {
     }
   }
 
+
   function handleSelectPlan(mealPlanId) {
+    setPlannedMeals([]);
     setSelectedMealPlanId(mealPlanId);
     setEditingPlanId(null);
     setEditingPlanName("");
     setError("");
+
+    sessionStorage.setItem(
+      ACTIVE_MEAL_PLAN_KEY,
+      String(mealPlanId)
+    );
   }
+
 
   function handleStartEditing(mealPlan) {
     setEditingPlanId(mealPlan.id);
@@ -132,10 +202,12 @@ function MealPlanPage() {
     setError("");
   }
 
+
   function handleCancelEditing() {
     setEditingPlanId(null);
     setEditingPlanName("");
   }
+
 
   async function handleUpdatePlan(event, mealPlanId) {
     event.preventDefault();
@@ -169,6 +241,7 @@ function MealPlanPage() {
     }
   }
 
+
   async function handleDeletePlan(mealPlanId) {
     const shouldDelete = window.confirm(
       "Delete this meal plan and all of its planned meals?"
@@ -190,11 +263,24 @@ function MealPlanPage() {
       setMealPlans(remainingPlans);
 
       if (selectedMealPlanId === mealPlanId) {
-        setSelectedMealPlanId(
+        const nextPlanId =
           remainingPlans.length > 0
             ? remainingPlans[0].id
-            : null
-        );
+            : null;
+
+        setPlannedMeals([]);
+        setSelectedMealPlanId(nextPlanId);
+
+        if (nextPlanId) {
+          sessionStorage.setItem(
+            ACTIVE_MEAL_PLAN_KEY,
+            String(nextPlanId)
+          );
+        } else {
+          sessionStorage.removeItem(
+            ACTIVE_MEAL_PLAN_KEY
+          );
+        }
       }
 
       if (editingPlanId === mealPlanId) {
@@ -205,6 +291,7 @@ function MealPlanPage() {
       setError(error.message);
     }
   }
+
 
   async function handleMoveOrSwapMeal(
     plannedMealId,
@@ -235,6 +322,7 @@ function MealPlanPage() {
     }
   }
 
+
   async function handleCopyMeal(plannedMeal, newDay) {
     if (!selectedMealPlanId) {
       return false;
@@ -248,6 +336,7 @@ function MealPlanPage() {
       setError(
         `${newDay} already has a planned meal.`
       );
+
       return false;
     }
 
@@ -276,6 +365,7 @@ function MealPlanPage() {
     }
   }
 
+
   async function handleRemoveMeal(plannedMealId) {
     const shouldRemove = window.confirm(
       "Remove this meal from the meal plan?"
@@ -301,16 +391,22 @@ function MealPlanPage() {
     }
   }
 
+
   const selectedMealPlan = mealPlans.find(
     (mealPlan) => mealPlan.id === selectedMealPlanId
   );
 
+
   return (
     <main className="meal-plan-page">
       <section className="meal-plan-intro">
+        <p className="meal-plan-page-eyebrow">
+          Plan your week
+        </p>
+
         <h1>My Meal Plans</h1>
 
-        <p>
+        <p className="meal-plan-page-description">
           Create a new meal plan or choose an existing
           one, and organize your dinners for the week.
         </p>
@@ -329,6 +425,10 @@ function MealPlanPage() {
         <div className="meal-plan-management-grid">
           <section className="meal-plan-management-column">
             <div className="meal-plan-column-heading">
+              <p className="meal-plan-column-eyebrow">
+                Start fresh
+              </p>
+
               <h2>New Meal Plan</h2>
             </div>
 
@@ -367,6 +467,10 @@ function MealPlanPage() {
 
           <section className="meal-plan-management-column">
             <div className="meal-plan-column-heading">
+              <p className="meal-plan-column-eyebrow">
+                Choose a plan
+              </p>
+
               <h2>Existing Meal Plans</h2>
             </div>
 
@@ -542,5 +646,6 @@ function MealPlanPage() {
     </main>
   );
 }
+
 
 export default MealPlanPage;

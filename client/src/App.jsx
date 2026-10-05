@@ -9,7 +9,7 @@ import "./App.css";
 
 import Header from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useAuth } from "./context/AuthContext";
+import useAuth from "./context/useAuth";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import MealPlanPage from "./pages/MealPlanPage";

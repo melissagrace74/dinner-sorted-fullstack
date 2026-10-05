@@ -1,20 +1,28 @@
 import { Link } from "react-router-dom";
 
+import "./NotFoundPage.css";
+
 function NotFoundPage() {
   return (
-    <main className="recipe-error">
-      <h1>Page Not Found</h1>
+    <main className="not-found-page">
+      <section className="not-found-content">
+        <p className="not-found-eyebrow">
+          404 Error
+        </p>
 
-      <p>
-        Sorry, the page you're looking for doesn't exist.
-      </p>
+        <h1>Page Not Found</h1>
 
-      <Link
-        className="back-link"
-        to="/"
-      >
-        Return Home
-      </Link>
+        <p>
+          Sorry, the page you're looking for doesn't exist.
+        </p>
+
+        <Link
+          className="not-found-home-link"
+          to="/"
+        >
+          Return Home
+        </Link>
+      </section>
     </main>
   );
 }

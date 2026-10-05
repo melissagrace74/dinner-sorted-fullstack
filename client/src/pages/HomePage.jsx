@@ -1,24 +1,63 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import RecipeCard from "../components/RecipeCard";
 import SearchBar from "../components/SearchBar";
 import { searchMeals } from "../services/mealApi";
 
+import heroDinner from "../assets/hero-dinner.png";
+import "./HomePage.css";
+
 const SEARCH_STORAGE_KEY = "dinnerSortedCurrentSearch";
 
 
 function HomePage() {
-  const [meals, setMeals] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(
+  const [initialSearch] = useState(
     () => sessionStorage.getItem(SEARCH_STORAGE_KEY) || ""
   );
+  const [meals, setMeals] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [hasSearched, setHasSearched] = useState(
-    () => Boolean(sessionStorage.getItem(SEARCH_STORAGE_KEY))
+    () => Boolean(initialSearch)
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(
+    () => Boolean(initialSearch)
+  );
   const [error, setError] = useState("");
 
-  const runSearch = useCallback(async (term, saveSearch = true) => {
+  useEffect(() => {
+    if (!initialSearch) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    async function restoreSearch() {
+      try {
+        const results = await searchMeals(initialSearch);
+
+        if (!isCancelled) {
+          setMeals(results);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setMeals([]);
+          setError(error.message);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    restoreSearch();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [initialSearch]);
+
+  async function runSearch(term) {
     const trimmedTerm = term.trim();
 
     if (!trimmedTerm) {
@@ -35,7 +74,7 @@ function HomePage() {
       setMeals(results);
       setSearchTerm(trimmedTerm);
 
-      if (saveSearch && results.length > 0) {
+      if (results.length > 0) {
         sessionStorage.setItem(
           SEARCH_STORAGE_KEY,
           trimmedTerm
@@ -47,74 +86,131 @@ function HomePage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    const savedSearch = sessionStorage.getItem(
-      SEARCH_STORAGE_KEY
-    );
-
-    if (savedSearch) {
-      runSearch(savedSearch, false);
-    }
-  }, [runSearch]);
+  }
 
   function handleSearch(term) {
     runSearch(term);
   }
 
   return (
-    <main>
-      <section className="home-intro">
-        <h1>Find recipes. Plan your week.</h1>
-
-        <p>Take dinner off your mind.</p>
-
-        <SearchBar
-          key={searchTerm}
-          onSearch={handleSearch}
-          isLoading={isLoading}
-          initialValue={searchTerm}
+    <main className="home-page">
+      <section className="home-hero">
+        <div
+          className="home-hero-photo"
+          style={{
+            backgroundImage: `url(${heroDinner})`,
+          }}
+          aria-hidden="true"
         />
+
+        <div className="home-hero-overlay" />
+
+        <div className="home-hero-inner">
+          <div className="home-hero-content">
+            <p className="home-hero-eyebrow">
+              Dinner planning made simpler
+            </p>
+
+            <h1>
+              Find Your Next
+              <span>Favorite Dinner</span>
+            </h1>
+
+            <p className="home-hero-description">
+              Search for recipes, explore new ideas,
+              and add them to your weekly meal plan.
+            </p>
+
+            <div className="home-search">
+              <SearchBar
+                key={searchTerm}
+                onSearch={handleSearch}
+                isLoading={isLoading}
+                initialValue={searchTerm}
+              />
+            </div>
+          </div>
+
+          <div
+            className="home-hero-message"
+            aria-hidden="true"
+          >
+            <p>
+              Good food
+              <br />
+              brings us
+              <br />
+              together.
+            </p>
+
+            <span className="home-hero-message-line" />
+          </div>
+        </div>
       </section>
 
-      {isLoading && (
-        <p className="search-status">
-          Searching for recipes...
-        </p>
-      )}
-
-      {error && (
-        <p className="search-message" role="alert">
-          {error}
-        </p>
-      )}
-
-      {!isLoading &&
-        hasSearched &&
-        !error &&
-        meals.length === 0 && (
-          <p className="search-message">
-            No recipes found. Try another search.
+      <section
+        className="home-results-area"
+        aria-live="polite"
+      >
+        {isLoading && (
+          <p className="search-status">
+            Searching for recipes...
           </p>
         )}
 
-      {!isLoading && meals.length > 0 && (
-        <section className="recipe-results">
-          <h2>Recipes</h2>
+        {error && (
+          <p
+            className="search-message"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
 
-          <div className="recipe-grid">
-            {meals.map((meal) => (
-              <RecipeCard
-                key={meal.idMeal}
-                meal={meal}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+        {!isLoading &&
+          hasSearched &&
+          !error &&
+          meals.length === 0 && (
+            <p className="search-message">
+              No recipes found. Try another search.
+            </p>
+          )}
+
+        {!isLoading && meals.length > 0 && (
+          <section className="recipe-results">
+            <div className="home-results-heading">
+              <div>
+                <p className="home-results-eyebrow">
+                  Explore recipes
+                </p>
+
+                <h2>Recipe Results</h2>
+              </div>
+
+              {searchTerm && (
+                <p className="home-results-summary">
+                  Showing results for{" "}
+                  <strong>
+                    “{searchTerm}”
+                  </strong>
+                </p>
+              )}
+            </div>
+
+            <div className="recipe-grid">
+              {meals.map((meal) => (
+                <RecipeCard
+                  key={meal.idMeal}
+                  meal={meal}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </section>
     </main>
   );
 }
+
 
 export default HomePage;

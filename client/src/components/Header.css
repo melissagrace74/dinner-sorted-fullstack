@@ -1,0 +1,214 @@
+/* ========================================
+   Dinner, Sorted
+   Site Header
+======================================== */
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  border-bottom: 1px solid #e5dfd3;
+  background-color: #fffdf8;
+}
+
+.site-header-inner {
+  display: flex;
+  width: min(1320px, calc(100% - 4rem));
+  min-height: 76px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+
+/* ========================================
+   Wordmark
+======================================== */
+
+.site-title {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: baseline;
+  color: #39452e;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: #39452e;
+  text-decoration: none;
+}
+
+.site-title-dinner {
+  color: #39452e;
+}
+
+.site-title-sorted {
+  margin-left: 0.18em;
+  color: #b84e31;
+  font-style: italic;
+  font-weight: 700;
+}
+
+
+/* ========================================
+   Navigation
+======================================== */
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2.25rem;
+}
+
+.site-nav a,
+.user-greeting,
+.nav-button {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.site-nav a {
+  position: relative;
+  padding: 0.4rem 0;
+  color: #263025;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: #ad4931;
+  text-decoration: none;
+}
+
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background-color: #b84e31;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.site-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.user-greeting {
+  color: #263025;
+  white-space: nowrap;
+}
+
+.nav-button {
+  margin: 0;
+  border: 1px solid #b84e31;
+  border-radius: 999px;
+  padding: 0.65rem 1.25rem;
+  background-color: transparent;
+  color: #a9432a;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #b84e31;
+  color: #fffdf8;
+}
+
+
+/* ========================================
+   Tablet
+======================================== */
+
+@media (max-width: 850px) {
+  .site-header-inner {
+    width: min(100% - 3rem, 1320px);
+    gap: 2rem;
+  }
+
+  .site-title {
+    font-size: 2rem;
+  }
+
+  .site-nav {
+    gap: 1.4rem;
+  }
+
+  .site-nav a,
+  .user-greeting,
+  .nav-button {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 650px) {
+  .site-header-inner {
+    width: calc(100% - 2rem);
+    min-height: 0;
+    padding: 1.25rem 0 1.15rem;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .site-title {
+    font-size: 2rem;
+  }
+
+  .site-nav {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, auto);
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.75rem;
+    row-gap: 0.75rem;
+  }
+
+  .site-nav a,
+  .user-greeting,
+  .nav-button {
+    font-size: 0.9rem;
+  }
+
+  .site-nav a {
+    justify-self: center;
+  }
+
+  .user-greeting {
+    order: 3;
+    justify-self: center;
+  }
+
+  .nav-button {
+    order: 4;
+    justify-self: center;
+    padding: 0.5rem 1rem;
+  }
+}

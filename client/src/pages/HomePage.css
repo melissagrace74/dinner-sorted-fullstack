@@ -1,0 +1,680 @@
+/* ========================================
+   Dinner, Sorted
+   Home Page
+======================================== */
+
+.home-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 5rem;
+  background-color: #fbf7ef;
+}
+
+
+/* ========================================
+   Hero
+======================================== */
+
+.home-hero {
+  position: relative;
+  width: 100%;
+  min-height: 510px;
+  overflow: hidden;
+  background-color: #f7efe1;
+}
+
+.home-hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(251, 247, 239, 0.99) 0%,
+      rgba(251, 247, 239, 0.96) 24%,
+      rgba(251, 247, 239, 0.7) 39%,
+      rgba(251, 247, 239, 0.12) 55%,
+      rgba(251, 247, 239, 0) 68%
+    );
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.1fr)
+    minmax(360px, 0.9fr);
+  width: min(1320px, calc(100% - 4rem));
+  min-height: 510px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+
+/* ========================================
+   Hero Copy
+======================================== */
+
+.home-hero-content {
+  width: 100%;
+  max-width: 700px;
+  padding: 3.75rem 0 4.25rem;
+  text-align: left;
+}
+
+.home-hero-eyebrow {
+  margin: 0 0 1rem;
+  color: #66734f;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.home-hero h1 {
+  width: 100%;
+  max-width: 700px;
+  margin: 0;
+  color: #293728;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: clamp(3.1rem, 4.5vw, 4.35rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-align: left;
+}
+
+.home-hero h1 span {
+  display: block;
+  margin-top: 0.12em;
+  color: #b64e31;
+  font-style: italic;
+}
+
+.home-hero-description {
+  width: 100%;
+  max-width: 570px;
+  margin: 1.4rem 0 0;
+  color: #343c32;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+
+/* ========================================
+   Hero Search
+======================================== */
+
+.home-search {
+  width: 100%;
+  max-width: 650px;
+  margin: 1.8rem 0 0;
+}
+
+.home-search form {
+  width: 100%;
+  margin: 0;
+}
+
+.home-search .search-bar {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0.35rem;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #ded5c6;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 7px 20px rgba(62, 51, 39, 0.08);
+}
+
+.home-search .search-bar label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.home-search .search-bar input {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  padding: 0.85rem 1.25rem;
+  background-color: transparent;
+  color: #293128;
+  font-size: 0.95rem;
+}
+
+.home-search .search-bar input:focus {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.home-search .search-bar button {
+  flex-shrink: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.85rem 2.25rem;
+  background-color: #b94d2f;
+  color: #fffdf8;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.home-search .search-bar button:hover:not(:disabled) {
+  background-color: #9f3e26;
+}
+
+.home-search .search-bar button:disabled {
+  background-color: #d7d2ca;
+  color: #85827d;
+  cursor: not-allowed;
+}
+
+
+/* ========================================
+   Hero Editorial Message
+======================================== */
+
+.home-hero-message {
+  position: absolute;
+  top: 3.6rem;
+  right: 0;
+  width: 245px;
+  margin: 0;
+  color: #fffaf0;
+  text-shadow:
+    0 2px 8px rgba(38, 42, 31, 0.38);
+}
+
+.home-hero-message p {
+  margin: 0;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: clamp(1.9rem, 2.7vw, 2.75rem);
+  font-style: italic;
+  line-height: 1.03;
+}
+
+.home-hero-message-line {
+  display: block;
+  width: 90px;
+  height: 2px;
+  margin: 0.9rem auto 0;
+  border-radius: 50%;
+  background-color: #fffaf0;
+  box-shadow:
+    0 2px 8px rgba(38, 42, 31, 0.25);
+  transform: rotate(-6deg);
+}
+
+
+/* ========================================
+   Results Area
+======================================== */
+
+.home-results-area {
+  width: min(1320px, calc(100% - 4rem));
+  margin: 0 auto;
+}
+
+.home-results-area .search-status,
+.home-results-area .search-message {
+  margin: 2.5rem auto 0;
+}
+
+.home-results-area .recipe-results {
+  width: 100%;
+  max-width: none;
+  margin: 3.5rem 0 0;
+}
+
+.home-results-heading {
+  display: flex;
+  width: 100%;
+  margin-bottom: 1.6rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  text-align: left;
+}
+
+.home-results-heading > div {
+  margin: 0;
+  text-align: left;
+}
+
+.home-results-eyebrow {
+  margin: 0 0 0.35rem;
+  color: #66734f;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.home-results-heading h2 {
+  margin: 0;
+  color: #293728;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: clamp(2.25rem, 3.5vw, 3.25rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: left;
+}
+
+.home-results-summary {
+  margin: 0 0 0.25rem;
+  color: #3f443c;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.home-results-summary strong {
+  color: #b64e31;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.08em;
+  font-style: italic;
+}
+
+
+/* ========================================
+   Recipe Grid
+======================================== */
+
+.home-results-area .recipe-grid {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+
+/* ========================================
+   Home Recipe Cards
+======================================== */
+
+.home-results-area .recipe-card {
+  overflow: hidden;
+  border: 1px solid #dfd8cc;
+  border-radius: 12px;
+  background-color: #fffdf8;
+  box-shadow:
+    0 5px 16px rgba(53, 45, 35, 0.06);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.home-results-area .recipe-card:hover {
+  border-color: #b85a3f;
+  box-shadow:
+    0 12px 25px rgba(53, 45, 35, 0.11);
+  transform: translateY(-3px);
+}
+
+.home-results-area .recipe-card-link {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-results-area .recipe-card-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-results-area .recipe-card-image {
+  width: 100%;
+  overflow: hidden;
+  background-color: #eee8dc;
+}
+
+.home-results-area .recipe-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.home-results-area .recipe-card:hover img {
+  transform: scale(1.025);
+}
+
+.home-results-area .recipe-card-content {
+  padding: 1.15rem 1.25rem 1.3rem;
+}
+
+.home-results-area .recipe-card h3 {
+  margin: 0 0 0.7rem;
+  color: #293728;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+
+/* ========================================
+   Recipe Card Metadata
+======================================== */
+
+.home-results-area .recipe-card-meta {
+  display: flex;
+  margin: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+}
+
+.home-results-area .recipe-card-meta p {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  color: #4f574b;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.home-results-area .recipe-card-meta strong {
+  color: #65704e;
+  font-weight: 700;
+}
+
+
+/* ========================================
+   Tablet
+======================================== */
+
+@media (max-width: 950px) {
+  .home-hero {
+    min-height: 500px;
+  }
+
+  .home-hero-photo {
+    background-position: 62% center;
+  }
+
+  .home-hero-inner {
+    grid-template-columns:
+      minmax(0, 1.25fr)
+      minmax(230px, 0.75fr);
+    width: min(100% - 3rem, 1320px);
+    min-height: 500px;
+  }
+
+  .home-hero-content {
+    max-width: 590px;
+    padding: 3.5rem 0 4rem;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(2.9rem, 5.5vw, 3.85rem);
+  }
+
+  .home-hero-message {
+    top: 2.75rem;
+    width: 205px;
+  }
+
+  .home-hero-message p {
+    font-size: 2rem;
+  }
+
+  .home-results-area {
+    width: min(100% - 3rem, 1320px);
+  }
+}
+
+
+/* ========================================
+   Small Tablet
+======================================== */
+
+@media (max-width: 750px) {
+  .home-hero {
+    min-height: 620px;
+    overflow: hidden;
+  }
+
+  .home-hero-photo {
+    inset: 0;
+    height: auto;
+    background-position: 66% center;
+  }
+
+  .home-hero-overlay {
+    display: block;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(251, 247, 239, 0.94) 0%,
+        rgba(251, 247, 239, 0.88) 40%,
+        rgba(251, 247, 239, 0.42) 68%,
+        rgba(251, 247, 239, 0.12) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(251, 247, 239, 0.16) 0%,
+        rgba(251, 247, 239, 0.08) 62%,
+        rgba(251, 247, 239, 0.3) 100%
+      );
+  }
+
+  .home-hero-inner {
+    display: flex;
+    width: min(100% - 3rem, 620px);
+    min-height: 620px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .home-hero-content {
+    width: 100%;
+    max-width: 540px;
+    margin: 0;
+    padding: 3.5rem 0;
+  }
+
+  .home-hero h1 {
+    max-width: 540px;
+    font-size: clamp(2.85rem, 9vw, 3.7rem);
+  }
+
+  .home-hero-description {
+    max-width: 470px;
+  }
+
+  .home-hero-message {
+    display: none;
+  }
+
+  .home-results-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .home-results-summary {
+    text-align: left;
+  }
+}
+
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 600px) {
+  .home-page {
+    padding-bottom: 3rem;
+  }
+
+  .home-hero {
+    min-height: 610px;
+  }
+
+  .home-hero-photo {
+    background-position: 63% center;
+  }
+
+  .home-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(251, 247, 239, 0.94) 0%,
+        rgba(251, 247, 239, 0.87) 50%,
+        rgba(251, 247, 239, 0.44) 78%,
+        rgba(251, 247, 239, 0.16) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(251, 247, 239, 0.08) 0%,
+        rgba(251, 247, 239, 0.05) 58%,
+        rgba(251, 247, 239, 0.28) 100%
+      );
+  }
+
+  .home-hero-inner {
+    width: calc(100% - 2rem);
+    min-height: 610px;
+    align-items: center;
+  }
+
+  .home-hero-content {
+    width: 100%;
+    max-width: 430px;
+    padding: 2.75rem 0;
+  }
+
+  .home-hero-eyebrow {
+    margin-bottom: 0.75rem;
+    font-size: 0.66rem;
+  }
+
+  .home-hero h1 {
+    max-width: 430px;
+    font-size: clamp(2.5rem, 11.5vw, 3.25rem);
+  }
+
+  .home-hero-description {
+    max-width: 390px;
+    margin-top: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  .home-search {
+    max-width: 430px;
+    margin-top: 1.4rem;
+  }
+
+  .home-search .search-bar {
+    padding: 0.3rem;
+  }
+
+  .home-search .search-bar input {
+    padding: 0.75rem 0.8rem;
+    font-size: 0.86rem;
+  }
+
+  .home-search .search-bar button {
+    padding: 0.75rem 1.1rem;
+    font-size: 0.86rem;
+  }
+
+  .home-results-area {
+    width: calc(100% - 2rem);
+  }
+
+  .home-results-area .recipe-results {
+    margin-top: 2.75rem;
+  }
+
+  .home-results-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .home-results-heading h2 {
+    font-size: 2.15rem;
+  }
+
+  .home-results-summary {
+    font-size: 0.9rem;
+  }
+
+  .home-results-area .recipe-card-content {
+    padding: 1rem 1.1rem 1.15rem;
+  }
+
+  .home-results-area .recipe-card-meta {
+    gap: 0.25rem 0.85rem;
+  }
+
+  .home-results-area .recipe-card-meta p {
+    font-size: 0.76rem;
+  }
+}
